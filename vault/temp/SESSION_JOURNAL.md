@@ -886,3 +886,512 @@
 ## 2026-09-15 12:51:23.051Z click
 - element: {"tag":"button","role":null,"ariaLabel":"Κλείσιμο","name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":""}
 
+## 2026-09-17 09:00:59.030Z load
+- url: http://192.168.1.73:3000/
+- title: ReportAKI
+
+## 2026-09-17 09:01:06.896Z click
+- element: {"tag":"html","role":null,"ariaLabel":null,"name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"\n    import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$RefreshSig$ = () => (type) => type;\n\n    \n\n    \n    \n    \n    \n    ReportAKI\n    const SITE_PAGES_ENDPOINT = '/__reportaki/site-pages';\n\nconst OUTGOING_SITE_PAGES_MESSAGE = 'sitePages';\nconst INCOMING_REQUEST_SITE_PAGES_MESSAGE = 'request-site-pages';\n\nconst ALLOWED_PARENT_ORIGINS = [\n\t'https://reportaki.app.com',\n\t'https://reportaki.app.dev',\n\t'https://reportaki-frontend-local.app.dev',\n\t'http://localhost:4000',\n];\n\nfunction postSitePages(pages) {\n\tlet parentOrigin = window.location.ancestorOrigins?.[0];\n\tif (!parentOrigin && document.referrer) {\n\t\ttry {\n\t\t\tparentOrigin = new URL(document.referrer).origin;\n\t\t} catch {}\n\t}\n\tif (parentOrigin && ALLOWED_PARENT_ORIGINS.includes(parentOrigin)) {\n\t\twindow.parent.postMessage({ type: OUTGOING_SITE_PAGES_MESSAGE, payload: { pages } }, parentOrigin);\n\t}\n}\n\nasync function sendSitePagesToParent() {\n\tif (window.self === window.top) {\n\t\treturn;\n\t}\n\n\ttry {\n\t\tconst response = await fetch(SITE_PAGES_ENDPOINT);\n\t\tif (!response.ok) {\n\t\t\tthrow new Error(`HTTP ${response.status}`);\n\t\t}\n\t\tpostSitePages(await response.json());\n\t} catch (error) {\n\t\tconsole.error('[site-pages] Failed to send site pages to parent:', error);\n\t}\n}\n\nif (window.self !== window.top) {\n\twindow.addEventListener('load', sendSitePagesToParent);\n\twindow.addEventListener('message', (event) => {\n\t\tif (event.data?.type === INCOMING_REQUEST_SITE_PAGES_MESSAGE) {\n\t\t\tsendSitePagesToParent();\n\t\t}\n\t});\n}\n\n    \n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-id],\n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-assisted-id] {\n\t\tcursor: default !important;\n\t\toverflow-wrap: anywhere;\n\t}\n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-id][contenteditable=\"true\"],\n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-assisted-id][contenteditable=\"true\"] {\n\t\toutline: 1px solid #673DE6;\n\t\tcaret-color: currentColor;\n\t\tuser-select: text;\n\t\t-webkit-user-selec..."}
+
+## 2026-09-17 09:01:23.463Z console.error
+- text: 
+    Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s object 
+    
+    Check your code at App.jsx:21. 
+        at App
+
+## 2026-09-17 09:01:23.465Z navigate
+- url: http://192.168.1.73:3000/
+- via: replaceState
+
+## 2026-09-17 09:01:26.805Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:01:26.879Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:01:30.789Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"051207513001","valueLength":12,"text":""}
+
+## 2026-09-17 09:01:30.790Z click
+- element: {"tag":"button","role":null,"ariaLabel":"Αναζήτηση","name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":""}
+
+## 2026-09-17 09:01:30.793Z submit
+- action: http://192.168.1.73:3000/
+- fields: [{"label":"Αναζήτηση με ΚΑΕΚ...","type":"text","value":"051207513001","length":12,"redacted":false},{"label":"Αναζήτηση","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-17 09:01:30.801Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"051207513001","valueLength":12,"text":""}
+
+## 2026-09-17 09:01:30.965Z navigate
+- url: http://192.168.1.73:3000/property/051207513001
+- via: pushState
+
+## 2026-09-17 09:01:37.046Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"button","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Επικοινωνία"}
+
+## 2026-09-17 09:01:37.227Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:01:38.466Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:01:39.249Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:01:39.855Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"σγωσζβη","valueLength":7,"text":""}
+
+## 2026-09-17 09:01:40.245Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"σγωσζβη","valueLength":7,"text":""}
+
+## 2026-09-17 09:01:40.246Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:01:40.321Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:01:40.867Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"reportaki.support@gmail.com","valueLength":27,"text":""}
+
+## 2026-09-17 09:01:42.565Z click
+- element: {"tag":"body","role":null,"ariaLabel":null,"name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"\n    051207513001Μαραθωνοκάμπου 21, Περιστέρι, ΤΚ 121 36Εξαγωγή919.82 τ.μ.124.15 μ.38.005569, 23.681219+− Leaflet | © OpenStreetMapΔεδομένα Ακινήτου ανά ΕπίπεδοΓεωτεμαχία Εθνικού ΚτηματολογίουΓεωτεμαχία Εθνικού ΚτηματολογίουΔημοτικές Ενότητες 2021SDIGMAP / ΓΠΣΕπίσημη Κτηματολογική ΚαταγραφήΔιοικητική Υπαγωγή: ΔΗΜΟΤΙΚΗ ΕΝΟΤΗΤΑ ΠΕΡΙΣΤΕΡΙΟΥΤο ακίνητο (920 τ.μ.) είναι επίσημα καταχωρημένο και εντοπισμένο στα κτηματολογικά διαγράμματα υπό τον κωδικό ενότητας 470100. Η εγγραφή κατοχυρώνει τη χωρική του ταυτότητα και τη διοικητική του αρμοδιότητα.Τι ισχύει με την καταγραφή;Πιστοποιεί την επίσημη χωρική αποτύπωση, τα όρια και το εμβαδόν του γεωτεμαχίου στην αρμόδια αρχή.Επιτρέπει άμεση δόμηση;Η κτηματολογική καταγραφή ορίζει τη γεωμετρία. Η δυνατότητα δόμησης ρυθμίζεται από τις ισχύουσες ρυμοτομικές γραμμές.Τι σημαίνει για τον ιδιοκτήτη;Παρέχει απόλυτη σαφήνεια για τη θέση, το εμβαδόν και το διοικητικό πλαίσιο στο οποίο υπάγεται το ακίνητο.Κωδικός470100ΟνομασίαΔΗΜΟΤΙΚΗ ΕΝΟΤΗΤΑ ΠΕΡΙΣΤΕΡΙΟΥNAME_ENGMunicipal Unit of PeristeriΝομοθεσία:Ισχύουσα κανονιστική ρύθμιση / πράξηΙσχύει σήμεραΠόρισμαΠατήστε για παραγωγή και προβολή πορίσματοςΕπικοινωνία© 2026 ReportAKI\n    \n    // plugins/visual-editor/state/editing-state.js\nvar current = null;\nfunction getEditing() {\n  return current;\n}\nfunction setEditing(info) {\n  current = info;\n}\nfunction clearEditing() {\n  current = null;\n}\n\n// plugins/visual-editor/constants/selectors.js\nvar ELEMENT_TYPE_MAP = {\n  text: [\"a\", \"Link\", \"p\", \"span\", \"time\", \"h1\", \"h2\", \"h3\", \"h4\", \"h5\", \"h6\", \"label\", \"Label\", \"strong\", \"em\", \"b\", \"i\", \"u\"],\n  button: [\"button\", \"Button\"],\n  image: [\"img\"]\n};\nvar ELEMENT_TYPE_TRANSLATIONS = {\n  text: { key: \"elementTypeText\", defaultLabel: \"Text\" },\n  button: { key: \"elementTypeButton\", defaultLabel: \"Button\" },\n  image: { key: \"elementTypeImage\", defaultLabel: \"Image\" },\n  block: { key: \"elementTypeBlock\", defaultLabel: \"Block\" }\n};\nvar FIXED_CONTEXT_SELECTOR = 'nav, header, [style*=\"position: fixed\"], [style*=\"pos..."}
+
+## 2026-09-17 09:01:58.698Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"el.tzanopoulou@gail.com","valueLength":23,"text":""}
+
+## 2026-09-17 09:01:59.538Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"el.tzanopoulou@gail.com","valueLength":23,"text":""}
+
+## 2026-09-17 09:02:01.751Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"el.tzanopoulou@gmail.com","valueLength":24,"text":""}
+
+## 2026-09-17 09:02:01.751Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"el.tzanopoulou@gmail.com","valueLength":24,"text":""}
+
+## 2026-09-17 09:02:01.752Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:02:01.847Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:02:02.451Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"ρδφηδξψ","valueLength":7,"text":""}
+
+## 2026-09-17 09:02:02.687Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"ρδφηδξψ","valueLength":7,"text":""}
+
+## 2026-09-17 09:02:02.688Z focus
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:02:02.759Z click
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:02:06.911Z change
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"m juycg gruytuyihn ","valueLength":19,"text":"m juycg gruytuyihn "}
+
+## 2026-09-17 09:02:06.911Z blur
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"m juycg gruytuyihn ","valueLength":19,"text":"m juycg gruytuyihn "}
+
+## 2026-09-17 09:02:06.997Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Αποστολή"}
+
+## 2026-09-17 09:02:06.998Z submit
+- action: http://192.168.1.73:3000/property/051207513001
+- fields: [{"label":"Όνομα","type":"text","value":"σγωσζβη","length":7,"redacted":false},{"label":"Email","type":"email","value":"el.tzanopoulou@gmail.com","length":24,"redacted":false},{"label":"Θέμα","type":"text","value":"ρδφηδξψ","length":7,"redacted":false},{"label":"Μήνυμα","type":"textarea","value":"m juycg gruytuyihn ","length":19,"redacted":false},{"label":"[submit]","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-17 09:02:07.018Z network.error
+- method: POST
+- url: http://192.168.1.73:3000/hcgi/platform/api/collections/contact_messages/records
+- status: 404
+- statusText: Not Found
+- requestBody: {"name":"σγωσζβη","email":"el.tzanopoulou@gmail.com","subject":"ρδφηδξψ","message":"m juycg gruytuyihn"}
+- durationMs: 19
+
+## 2026-09-17 09:02:07.019Z console.error
+- text: Fetch error from http://192.168.1.73:3000/hcgi/platform/api/collections/contact_messages/records: 
+
+## 2026-09-17 09:02:10.723Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Αποστολή"}
+
+## 2026-09-17 09:02:10.724Z submit
+- action: http://192.168.1.73:3000/property/051207513001
+- fields: [{"label":"Όνομα","type":"text","value":"σγωσζβη","length":7,"redacted":false},{"label":"Email","type":"email","value":"el.tzanopoulou@gmail.com","length":24,"redacted":false},{"label":"Θέμα","type":"text","value":"ρδφηδξψ","length":7,"redacted":false},{"label":"Μήνυμα","type":"textarea","value":"m juycg gruytuyihn ","length":19,"redacted":false},{"label":"[submit]","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-17 09:02:10.731Z network.error
+- method: POST
+- url: http://192.168.1.73:3000/hcgi/platform/api/collections/contact_messages/records
+- status: 404
+- statusText: Not Found
+- requestBody: {"name":"σγωσζβη","email":"el.tzanopoulou@gmail.com","subject":"ρδφηδξψ","message":"m juycg gruytuyihn"}
+- durationMs: 7
+
+## 2026-09-17 09:02:10.731Z console.error
+- text: Fetch error from http://192.168.1.73:3000/hcgi/platform/api/collections/contact_messages/records: 
+
+## 2026-09-17 09:02:11.827Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Αποστολή"}
+
+## 2026-09-17 09:02:11.828Z submit
+- action: http://192.168.1.73:3000/property/051207513001
+- fields: [{"label":"Όνομα","type":"text","value":"σγωσζβη","length":7,"redacted":false},{"label":"Email","type":"email","value":"el.tzanopoulou@gmail.com","length":24,"redacted":false},{"label":"Θέμα","type":"text","value":"ρδφηδξψ","length":7,"redacted":false},{"label":"Μήνυμα","type":"textarea","value":"m juycg gruytuyihn ","length":19,"redacted":false},{"label":"[submit]","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-17 09:02:11.833Z network.error
+- method: POST
+- url: http://192.168.1.73:3000/hcgi/platform/api/collections/contact_messages/records
+- status: 404
+- statusText: Not Found
+- requestBody: {"name":"σγωσζβη","email":"el.tzanopoulou@gmail.com","subject":"ρδφηδξψ","message":"m juycg gruytuyihn"}
+- durationMs: 5
+
+## 2026-09-17 09:02:11.833Z console.error
+- text: Fetch error from http://192.168.1.73:3000/hcgi/platform/api/collections/contact_messages/records: 
+
+## 2026-09-17 09:03:43.141Z focus
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"m juycg gruytuyihn ","valueLength":19,"text":"m juycg gruytuyihn "}
+
+## 2026-09-17 09:03:44.711Z blur
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"m juycg gruytuyihn ","valueLength":19,"text":"m juycg gruytuyihn "}
+
+## 2026-09-17 09:03:56.425Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Αποστολή"}
+
+## 2026-09-17 09:03:56.426Z submit
+- action: http://192.168.1.73:3000/property/051207513001
+- fields: [{"label":"Όνομα","type":"text","value":"σγωσζβη","length":7,"redacted":false},{"label":"Email","type":"email","value":"el.tzanopoulou@gmail.com","length":24,"redacted":false},{"label":"Θέμα","type":"text","value":"ρδφηδξψ","length":7,"redacted":false},{"label":"Μήνυμα","type":"textarea","value":"m juycg gruytuyihn ","length":19,"redacted":false},{"label":"[submit]","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-17 09:03:56.442Z network.error
+- method: POST
+- url: http://192.168.1.73:3000/hcgi/platform/api/collections/contact_messages/records
+- status: 404
+- statusText: Not Found
+- requestBody: {"name":"σγωσζβη","email":"el.tzanopoulou@gmail.com","subject":"ρδφηδξψ","message":"m juycg gruytuyihn"}
+- durationMs: 16
+
+## 2026-09-17 09:03:56.443Z console.error
+- text: Fetch error from http://192.168.1.73:3000/hcgi/platform/api/collections/contact_messages/records: 
+
+## 2026-09-17 09:04:01.145Z load
+- url: http://192.168.1.73:3000/property/051207513001
+- title: ReportAKI
+
+## 2026-09-17 09:04:01.509Z console.error
+- text: 
+    Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s object 
+    
+    Check your code at App.jsx:21. 
+        at App
+
+## 2026-09-17 09:04:08.593Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"button","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Επικοινωνία"}
+
+## 2026-09-17 09:04:08.618Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:04:09.577Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:04:09.681Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:04:10.056Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:04:10.871Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"reportaki.support@gmail.com","valueLength":27,"text":""}
+
+## 2026-09-17 09:04:11.536Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"reportaki.support@gmail.com","valueLength":27,"text":""}
+
+## 2026-09-17 09:04:11.565Z click
+- element: {"tag":"div","role":"dialog","ariaLabel":null,"name":null,"type":null,"id":"radix-:r0:","placeholder":null,"label":null,"value":null,"valueLength":0,"text":"ΕπικοινωνίαΌνομαEmailΘέμαΜήνυμαΑποστολήClose"}
+
+## 2026-09-17 09:04:11.581Z click
+- element: {"tag":"div","role":"dialog","ariaLabel":null,"name":null,"type":null,"id":"radix-:r0:","placeholder":null,"label":null,"value":null,"valueLength":0,"text":"ΕπικοινωνίαΌνομαEmailΘέμαΜήνυμαΑποστολήClose"}
+
+## 2026-09-17 09:04:11.848Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:04:11.934Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:04:12.426Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"σγωσζβη","valueLength":7,"text":""}
+
+## 2026-09-17 09:04:12.823Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"σγωσζβη","valueLength":7,"text":""}
+
+## 2026-09-17 09:04:12.894Z click
+- element: {"tag":"div","role":"dialog","ariaLabel":null,"name":null,"type":null,"id":"radix-:r0:","placeholder":null,"label":null,"value":null,"valueLength":0,"text":"ΕπικοινωνίαΌνομαEmailΘέμαΜήνυμαΑποστολήClose"}
+
+## 2026-09-17 09:04:13.120Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:04:13.205Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:04:13.675Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"ρδφηδξψ","valueLength":7,"text":""}
+
+## 2026-09-17 09:04:14.039Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"ρδφηδξψ","valueLength":7,"text":""}
+
+## 2026-09-17 09:04:14.040Z focus
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:04:14.118Z click
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:04:15.852Z change
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"κημξηνγρες;;ερεγν","valueLength":17,"text":"κημξηνγρες;;ερεγν"}
+
+## 2026-09-17 09:04:15.852Z blur
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"κημξηνγρες;;ερεγν","valueLength":17,"text":"κημξηνγρες;;ερεγν"}
+
+## 2026-09-17 09:04:15.932Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Αποστολή"}
+
+## 2026-09-17 09:04:15.933Z submit
+- action: http://192.168.1.73:3000/property/051207513001
+- fields: [{"label":"Όνομα","type":"text","value":"σγωσζβη","length":7,"redacted":false},{"label":"Email","type":"email","value":"reportaki.support@gmail.com","length":27,"redacted":false},{"label":"Θέμα","type":"text","value":"ρδφηδξψ","length":7,"redacted":false},{"label":"Μήνυμα","type":"textarea","value":"κημξηνγρες;;ερεγν","length":17,"redacted":false},{"label":"[submit]","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-17 09:04:15.945Z network.error
+- method: POST
+- url: http://192.168.1.73:3000/hcgi/platform/api/collections/contact_messages/records
+- status: 404
+- statusText: Not Found
+- requestBody: {"name":"σγωσζβη","email":"reportaki.support@gmail.com","subject":"ρδφηδξψ","message":"κημξηνγρες;;ερεγν"}
+- durationMs: 10
+
+## 2026-09-17 09:04:15.945Z console.error
+- text: Fetch error from http://192.168.1.73:3000/hcgi/platform/api/collections/contact_messages/records: 
+
+## 2026-09-17 09:14:13.583Z load
+- url: http://192.168.1.73:3000/property/051207513001
+- title: ReportAKI
+
+## 2026-09-17 09:14:13.936Z console.error
+- text: 
+    Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s object 
+    
+    Check your code at App.jsx:21. 
+        at App
+
+## 2026-09-17 09:17:19.445Z load
+- url: http://192.168.1.73:3000/property/051207513001
+- title: ReportAKI
+
+## 2026-09-17 09:17:19.899Z console.error
+- text: 
+    Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s object 
+    
+    Check your code at App.jsx:21. 
+        at App
+
+## 2026-09-17 09:17:25.584Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"button","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Επικοινωνία"}
+
+## 2026-09-17 09:17:25.627Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:17:26.711Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:17:27.253Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"σγωσζβη","valueLength":7,"text":""}
+
+## 2026-09-17 09:17:27.581Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"σγωσζβη","valueLength":7,"text":""}
+
+## 2026-09-17 09:17:27.581Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:17:27.636Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:17:28.132Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"reportaki.support@gmail.com","valueLength":27,"text":""}
+
+## 2026-09-17 09:17:28.422Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"reportaki.support@gmail.com","valueLength":27,"text":""}
+
+## 2026-09-17 09:17:28.424Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:17:28.501Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:17:29.146Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"ρδφηδξψ","valueLength":7,"text":""}
+
+## 2026-09-17 09:17:29.408Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"ρδφηδξψ","valueLength":7,"text":""}
+
+## 2026-09-17 09:17:29.409Z focus
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:17:29.509Z click
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:17:29.741Z change
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"w","valueLength":1,"text":"w"}
+
+## 2026-09-17 09:17:29.741Z blur
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"w","valueLength":1,"text":"w"}
+
+## 2026-09-17 09:17:30.990Z focus
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"w","valueLength":1,"text":"w"}
+
+## 2026-09-17 09:17:31.068Z click
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"w","valueLength":1,"text":"w"}
+
+## 2026-09-17 09:17:32.131Z change
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"wgdfsraewe2qfv","valueLength":14,"text":"wgdfsraewe2qfv"}
+
+## 2026-09-17 09:17:32.131Z blur
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"wgdfsraewe2qfv","valueLength":14,"text":"wgdfsraewe2qfv"}
+
+## 2026-09-17 09:17:32.178Z click
+- element: {"tag":"div","role":"dialog","ariaLabel":null,"name":null,"type":null,"id":"radix-:r0:","placeholder":null,"label":null,"value":null,"valueLength":0,"text":"ΕπικοινωνίαΌνομαEmailΘέμαΜήνυμαwgdfsraewe2qfvΑποστολήClose"}
+
+## 2026-09-17 09:17:32.579Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Αποστολή"}
+
+## 2026-09-17 09:17:32.581Z submit
+- action: http://192.168.1.73:3000/property/051207513001
+- fields: [{"label":"Όνομα","type":"text","value":"σγωσζβη","length":7,"redacted":false},{"label":"Email","type":"email","value":"reportaki.support@gmail.com","length":27,"redacted":false},{"label":"Θέμα","type":"text","value":"ρδφηδξψ","length":7,"redacted":false},{"label":"Μήνυμα","type":"textarea","value":"wgdfsraewe2qfv","length":14,"redacted":false},{"label":"[submit]","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-17 09:17:44.230Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"button","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Κλείσιμο"}
+
+## 2026-09-17 09:18:31.089Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"button","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Επικοινωνία"}
+
+## 2026-09-17 09:18:31.111Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:18:32.337Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:18:32.714Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:18:36.040Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"Elena","valueLength":5,"text":""}
+
+## 2026-09-17 09:18:36.041Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"Elena","valueLength":5,"text":""}
+
+## 2026-09-17 09:18:36.042Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:18:36.126Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:18:48.633Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"tzanopoulou@gmail.com","valueLength":21,"text":""}
+
+## 2026-09-17 09:18:51.865Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"tzanopoulou2000@gmail.com","valueLength":25,"text":""}
+
+## 2026-09-17 09:18:51.865Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"tzanopoulou2000@gmail.com","valueLength":25,"text":""}
+
+## 2026-09-17 09:18:51.865Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:18:51.954Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:18:53.305Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"ghfdgsrefrwe3erfg","valueLength":17,"text":""}
+
+## 2026-09-17 09:18:53.305Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"ghfdgsrefrwe3erfg","valueLength":17,"text":""}
+
+## 2026-09-17 09:18:53.306Z focus
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:18:53.399Z click
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:18:55.505Z change
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"thgrt4r32eqdsfcbv nghnrthegred ","valueLength":31,"text":"thgrt4r32eqdsfcbv nghnrthegred "}
+
+## 2026-09-17 09:18:55.505Z blur
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"thgrt4r32eqdsfcbv nghnrthegred ","valueLength":31,"text":"thgrt4r32eqdsfcbv nghnrthegred "}
+
+## 2026-09-17 09:18:55.574Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Αποστολή"}
+
+## 2026-09-17 09:18:55.576Z submit
+- action: http://192.168.1.73:3000/property/051207513001
+- fields: [{"label":"Όνομα","type":"text","value":"Elena","length":5,"redacted":false},{"label":"Email","type":"email","value":"tzanopoulou2000@gmail.com","length":25,"redacted":false},{"label":"Θέμα","type":"text","value":"ghfdgsrefrwe3erfg","length":17,"redacted":false},{"label":"Μήνυμα","type":"textarea","value":"thgrt4r32eqdsfcbv nghnrthegred ","length":31,"redacted":false},{"label":"[submit]","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-17 09:31:06.225Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"button","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Κλείσιμο"}
+
+## 2026-09-17 09:31:07.217Z click
+- element: {"tag":"div","role":null,"ariaLabel":null,"name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Επικοινωνία© 2026 ReportAKI"}
+
+## 2026-09-17 09:31:07.569Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"button","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Επικοινωνία"}
+
+## 2026-09-17 09:31:07.590Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:31:08.465Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:31:09.435Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"Elena","valueLength":5,"text":""}
+
+## 2026-09-17 09:31:09.953Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"Elena","valueLength":5,"text":""}
+
+## 2026-09-17 09:31:09.954Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:31:10.041Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:31:24.631Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"el.tzanopoulou@gmail.com","valueLength":24,"text":""}
+
+## 2026-09-17 09:31:24.631Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"el.tzanopoulou@gmail.com","valueLength":24,"text":""}
+
+## 2026-09-17 09:31:24.632Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:31:24.850Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:31:28.798Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"gfwrdcsvghbmhwDYGIY","valueLength":19,"text":""}
+
+## 2026-09-17 09:31:28.798Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"gfwrdcsvghbmhwDYGIY","valueLength":19,"text":""}
+
+## 2026-09-17 09:31:28.798Z focus
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-17 09:31:29.015Z click
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"J","valueLength":1,"text":"J"}
+
+## 2026-09-17 09:31:30.272Z change
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"JQFA5UYSTVB VYTQVHAB","valueLength":20,"text":"JQFA5UYSTVB VYTQVHAB"}
+
+## 2026-09-17 09:31:30.272Z blur
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"JQFA5UYSTVB VYTQVHAB","valueLength":20,"text":"JQFA5UYSTVB VYTQVHAB"}
+
+## 2026-09-17 09:31:31.584Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Αποστολή"}
+
+## 2026-09-17 09:31:31.586Z submit
+- action: http://192.168.1.73:3000/property/051207513001
+- fields: [{"label":"Όνομα","type":"text","value":"Elena","length":5,"redacted":false},{"label":"Email","type":"email","value":"el.tzanopoulou@gmail.com","length":24,"redacted":false},{"label":"Θέμα","type":"text","value":"gfwrdcsvghbmhwDYGIY","length":19,"redacted":false},{"label":"Μήνυμα","type":"textarea","value":"JQFA5UYSTVB VYTQVHAB","length":20,"redacted":false},{"label":"[submit]","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-17 09:32:24.314Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"button","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Κλείσιμο"}
+

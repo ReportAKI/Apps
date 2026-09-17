@@ -1,4 +1,3 @@
-
 /// <reference path="../pb_data/types.d.ts" />
 
 // Routes every _logs row to stdout/stderr on production
@@ -53,8 +52,13 @@ onModelCreate((e) => {
 
             $os.mkdirAll($filepath.dir(journalPath), 0o755)
 
-            // $os has no append primitive
-            $os.cmd("sh", "-c", 'printf "%s" "$1" >> "$2"', "sh", entry, journalPath).run()
+            // Cross-platform append: PowerShell στα Windows, sh σε Linux/macOS
+            const isWindows = $os.getenv("OS")?.includes("Windows") || $filepath.separator === "\\"
+            if (isWindows) {
+                $os.cmd("powershell", "-NoProfile", "-Command", "Add-Content", "-Path", journalPath, "-Value", entry, "-NoNewline").run()
+            } else {
+                $os.cmd("sh", "-c", 'printf "%s" "$1" >> "$2"', "sh", entry, journalPath).run()
+            }
         } catch (err) {
             console.error(`Failed to journal log: ${err}`)
         }
