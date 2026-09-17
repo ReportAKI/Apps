@@ -1,0 +1,163 @@
+import { Router } from 'express';
+import { GoogleGenAI } from '@google/genai';
+import { humanizeFieldName, formatFieldValue } from '../constants/fieldLabels.js';
+import { integratedAiRateLimit } from '../middleware/integrated-ai-rate-limit.js';
+
+const router = Router();
+
+const systemPrompt = `
+Είσαι κορυφαίος Διπλωματούχος Τοπογράφος Μηχανικός και Εμπειρογνώμονας Πολεοδόμος.
+Σου παρέχονται επίσημα κτηματολογικά και πολεοδομικά δεδομένα ακινήτου.
+Αποστολή σου είναι η σύνταξη μιας επίσημης, τεχνικά εμπεριστατωμένης και απόλυτα επαγγελματικής Τεχνικής Έκθεσης - Πορίσματος.
+
+ΤΟ ΚΕΙΜΕΝΟ ΠΡΕΠΕΙ ΝΑ ΕΙΝΑΙ ΣΥΝΕΧΗΣ ΡΕΩΝ ΛΟΓΟΣ ΧΩΡΙΣ ΑΡΙΘΜΗΜΕΝΟΥΣ ΤΙΤΛΟΥΣ, ΧΩΡΙΣ HEADINGS ΚΑΙ ΧΩΡΙΣ BULLET POINTS.
+Σύνταξε ΑΚΡΙΒΩΣ 7 συνεκτικές, τεχνικές παραγράφους (3 έως 5 προτάσεις η καθεμία), ενσωματώνοντας οργανικά τα πλήρη στοιχεία των ΦΕΚ:
+
+1η Παράγραφος (Ταυτότητα, Χωρική Υπαγωγή & Κτηματολόγιο):
+Αναφορά στον ΚΑΕΚ, πλήρη διεύθυνση, Δήμο, Περιφερειακή Ενότητα, συντεταγμένες κεντροειδούς, εμβαδόν (τ.μ.), περίμετρο (μ.) και Οικοδομικό Τετράγωνο. Καταγραφή του επίσημου χαρακτηρισμού χρήσης κατά το Εθνικό Κτηματολόγιο και του καταγεγραμμένου ποσοστού δικαιώματος κυριότητας.
+
+2η Παράγραφος (Χωρικό Καθεστώς, Χρήσεις Γης & Τίτλοι ΦΕΚ):
+Ενσωμάτωση του ΦΕΚ του Γενικού Πολεοδομικού Σχεδίου (ΓΠΣ) ΜΑΖΙ ΜΕ ΤΟΝ ΠΛΗΡΗ ΤΙΤΛΟ/ΘΕΜΑ ΤΗΣ ΑΠΟΦΑΣΗΣ (π.χ. «ΦΕΚ ... με τίτλο ...»). Προσδιορισμός της θεσμοθετημένης ζώνης χρήσης (π.χ. Γενική Κατοικία) και τεχνική ανάλυση των επιτρεπόμενων λειτουργιών σύμφωνα με το σχετικό κανονιστικό διάταγμα χρήσεων γης.
+
+3η Παράγραφος (Πολεοδομικά Μεγέθη, Συντελεστές & Αριθμητική Ανάλυση):
+Αναφορά στον εγκεκριμένο Συντελεστή Δόμησης (Σ.Δ.), το ποσοστό κάλυψης και το επιτρεπόμενο ύψος/ορόφους. Αναλυτικός αριθμητικός υπολογισμός της μέγιστης επιτρεπόμενης δόμησης (Εμβαδόν × Σ.Δ.) και της μέγιστης κάλυψης (Εμβαδόν × % κάλυψης) σε τετραγωνικά μέτρα, αποσαφηνίζοντας ότι τα μεγέθη αυτά αποτελούν το ανώτατο θεωρητικό κανονιστικό πλαίσιο της περιοχής.
+
+4η Παράγραφος (Κανόνες Αρτιότητας & Πρόσωπο επί Οδού):
+Αναλυτική αναφορά στα όρια αρτιότητας κατά κανόνα και κατά παρέκκλιση (εμβαδόν και πρόσωπο). Σύγκριση της επιφάνειας του γεωτεμαχίου με τα όρια αυτά και επισήμανση ότι η γεωμετρική αρτιότητα αποτελεί αναγκαία αλλά όχι ικανή συνθήκη οικοδομησιμότητας, η οποία εξαρτάται άμεσα από τη νομιμότητα του προσώπου και το ρυμοτομικό καθεστώς.
+
+5η Παράγραφος (Ρυμοτομικό Σχέδιο, Γραμμές & Τίτλοι Ρυμοτομικών ΦΕΚ):
+Αναφορά στα εγκεκριμένα ρυμοτομικά σχέδια και τροποποιήσεις με τα αντίστοιχα ΦΕΚ ΚΑΙ ΤΟΥΣ ΠΛΗΡΕΙΣ ΤΙΤΛΟΥΣ ΤΩΝ ΑΠΟΦΑΣΕΩΝ. Επισήμανση της θέσης των ρυμοτομικών και οικοδομικών γραμμών, καθώς και τυχόν εκκρεμοτήτων ρυμοτομικής απαλλοτρίωσης ή υποχρεώσεων εισφοράς σε γη/χρήμα.
+
+6η Παράγραφος (Ειδικές Δεσμεύσεις, Δίκτυα & Περιβαλλοντικές Προστασίες):
+Έλεγχος και ρητή τεχνική διαβεβαίωση περί ύπαρξης ή απουσίας ειδικών βαρών: ρέματα, προστατευόμενες περιοχές Natura 2000, δασικές εκτάσεις, γραμμές αιγιαλού/παραλίας, αρχαιολογικοί χώροι ή δεσμεύσεις για κοινωφελείς σκοπούς.
+
+7η Παράγραφος (Τεχνική Συμβουλή Μηχανικού & Δυνατότητες Αξιοποίησης):
+Συνδυασμός των διατάξεων των προαναφερθέντων ΦΕΚ και παροχή σαφούς συμβουλευτικής καθοδήγησης προς τον ενδιαφερόμενο: τι συγκεκριμένα επιτρέπεται να υλοποιήσει (π.χ. νέα ανέγερση, προσθήκη, εκσυγχρονισμός, επαγγελματική χρήση) και ποιο είναι το κρίσιμο τεχνικό επόμενο βήμα (π.χ. εξαρτημένο τοπογραφικό διάγραμμα, έλεγχος διάνοιξης και διαμόρφωσης της οδού, κύρωση πράξης αναλογισμού) ώστε να αποφευχθούν νομικές εμπλοκές ή καθυστερήσεις κατά την αδειοδότηση.
+
+ΑΥΣΤΗΡΟΙ ΚΑΝΟΝΕΣ & ΑΠΑΓΟΡΕΥΣΕΙΣ:
+- ΑΠΑΓΟΡΕΥΕΤΑΙ ΑΥΣΤΗΡΑ οποιοδήποτε disclaimer (ΜΗΝ ΓΡΑΦΕΙΣ: «Το παρόν πόρισμα συντάχθηκε...», «δεν υποκαθιστά επίσημο έλεγχο/ΥΔΟΜ», «βασίζεται στην πλατφόρμα SDIGMAP»).
+- ΑΠΑΓΟΡΕΥΟΝΤΑΙ ΤΙΤΛΟΙ, HEADINGS ΚΑΙ BULLETS (Μην γράφεις ##, ###, *, -).
+- ΑΠΑΓΟΡΕΥΟΝΤΑΙ ΤΑ URLs (Μην γράφεις https, http ή .pdf).
+- Μην τοποθετείς υπογραφές ή ημερομηνίες στο τέλος.
+- ΥΠΟΧΡΕΩΤΙΚΗ ΟΛΟΚΛΗΡΩΣΗ: Πρέπει να παραχθούν και οι 7 παράγραφοι πλήρεις, χωρίς διακοπή προτάσεων.
+`;
+
+function buildCompletePropertyPrompt({ kaek, geoData, area, perimeter, coords, sdigmap, property }) {
+  const lines = [];
+
+  lines.push('=== ΒΑΣΙΚΑ ΣΤΟΙΧΕΙΑ ΓΕΩΤΕΜΑΧΙΟΥ ===');
+  lines.push(`ΚΑΕΚ: ${kaek}`);
+  if (typeof area === 'number' || area) lines.push(`Εμβαδόν πολυγώνου: ${Number(area).toFixed(2)} τ.μ.`);
+  if (typeof perimeter === 'number' || perimeter) lines.push(`Περίμετρος πολυγώνου: ${Number(perimeter).toFixed(2)} μ.`);
+  
+  if (coords) {
+    const coordsStr = typeof coords === 'string' ? coords : `${coords.latitude}, ${coords.longitude}`;
+    lines.push(`Συντεταγμένες κεντροειδούς: ${coordsStr}`);
+  }
+
+  lines.push('\n=== ΣΤΟΙΧΕΙΑ ΓΕΩΚΩΔΙΚΟΠΟΙΗΣΗΣ & ΤΟΠΟΘΕΣΙΑΣ ===');
+  if (geoData?.fullAddress) lines.push(`Πλήρης Διεύθυνση: ${geoData.fullAddress}`);
+  if (geoData?.road) lines.push(`Οδός & Αριθμός: ${geoData.road} ${geoData.houseNumber || ''}`);
+  if (geoData?.city || geoData?.municipality) lines.push(`Δήμος / Πόλη: ${geoData.municipality || geoData.city}`);
+  if (geoData?.county) lines.push(`Περιφερειακή Ενότητα: ${geoData.county}`);
+  if (geoData?.postalCode) lines.push(`Ταχυδρομικός Κώδικας: ${geoData.postalCode}`);
+
+  lines.push('\n=== ΣΤΟΙΧΕΙΑ ΕΘΝΙΚΟΥ ΚΤΗΜΑΤΟΛΟΓΙΟΥ (ARCGIS) ===');
+  if (property?.description) lines.push(`Περιγραφή ακινήτου: ${property.description}`);
+  if (property?.urbanPlanning?.mainUse) lines.push(`Κύρια χρήση Κτηματολογίου: ${property.urbanPlanning.mainUse}`);
+  if (property?.urbanPlanning?.percentage != null) lines.push(`Ποσοστό δικαιώματος: ${property.urbanPlanning.percentage}%`);
+
+  lines.push('\n=== ΑΝΑΛΥΤΙΚΑ ΔΕΔΟΜΕΝΑ ΠΟΛΕΟΔΟΜΙΑΣ (SDIGMAP) ===');
+  if (sdigmap?.categories && Array.isArray(sdigmap.categories)) {
+    for (const category of sdigmap.categories) {
+      lines.push(`\n[Κατηγορία: ${category.label || category.key}]`);
+      for (const layer of category.layers || []) {
+        lines.push(`  * Επίπεδο: ${layer.label}`);
+        for (const record of layer.records || []) {
+          for (const field of record || []) {
+            if (field?.value !== undefined && field?.value !== null && field?.value !== '') {
+              const strVal = String(field.value).trim();
+              
+              if (strVal.startsWith('http') || strVal.includes('.pdf') || field.field?.includes('URL')) {
+                continue;
+              }
+
+              const label = humanizeFieldName(field.field) || field.field;
+              const formattedVal = formatFieldValue(field.field, field.value);
+              lines.push(`    - ${label}: ${formattedVal}`);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  lines.push('\nΠαρακαλώ συνέταξε το πλήρες τεχνικό πόρισμα αναλύοντας όλα τα ανωτέρω δεδομένα, ενσωματώνοντας τους τίτλους των ΦΕΚ και διατηρώντας αυστηρά επαγγελματικό ύφος μηχανικού, σε 7 πλήρεις παραγράφους χωρίς τίτλους, χωρίς disclaimers και χωρίς URLs.');
+  return lines.join('\n');
+}
+
+async function callGemini({ systemPrompt, userMessage }) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error('Το GEMINI_API_KEY δεν βρέθηκε στο .env');
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-3.6-flash',
+    contents: userMessage,
+    config: {
+      systemInstruction: systemPrompt,
+      temperature: 0.2,
+      maxOutputTokens: 8192,
+    }
+  });
+
+  const candidate = response?.candidates?.[0];
+  console.log('[Gemini Finish Reason]:', candidate?.finishReason);
+
+  const outputText = candidate?.content?.parts?.[0]?.text;
+  if (!outputText) {
+    throw new Error('Το Gemini επέστρεψε κενό κείμενο.');
+  }
+
+  console.log(`[AI Report] Επιτυχές μέγεθος κειμένου: ${outputText.length} χαρακτήρες.`);
+  return outputText.trim();
+}
+
+router.post('/', integratedAiRateLimit, async (req, res) => {
+  const { kaek, geoData, area, perimeter, coords, sdigmap, property } = req.body || {};
+
+  if (!kaek) {
+    return res.status(422).json({ error: 'Απαιτείται ο κωδικός ΚΑΕΚ' });
+  }
+
+  try {
+    const fullPrompt = buildCompletePropertyPrompt({
+      kaek,
+      geoData,
+      area,
+      perimeter,
+      coords,
+      sdigmap,
+      property
+    });
+
+    console.log(`[AI Report] Σύνταξη νέου πορίσματος από το Gemini για ΚΑΕΚ ${kaek}...`);
+
+    const summary = await callGemini({
+      systemPrompt,
+      userMessage: fullPrompt
+    });
+
+    console.log(`[AI Report] Επιτυχής σύνταξη πορίσματος για ΚΑΕΚ ${kaek}!`);
+    return res.json({ summary });
+
+  } catch (err) {
+    console.error('[AI Report Error]:', err.message || err);
+    return res.status(500).json({ error: err.message || 'Αποτυχία παραγωγής πορίσματος από το AI.' });
+  }
+});
+
+export default router;
