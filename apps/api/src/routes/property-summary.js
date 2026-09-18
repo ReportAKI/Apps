@@ -103,27 +103,46 @@ async function callGemini({ systemPrompt, userMessage }) {
   }
 
   const ai = new GoogleGenAI({ apiKey });
+  const modelName = 'gemini-3.6-flash';
+  let lastError = null;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-3.6-flash',
-    contents: userMessage,
-    config: {
-      systemInstruction: systemPrompt,
-      temperature: 0.2,
-      maxOutputTokens: 8192,
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      console.log(`[AI Report] Κλήση μοντέλου ${modelName} (Προσπάθεια ${attempt}/3)...`);
+
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: userMessage,
+        config: {
+          systemInstruction: systemPrompt,
+          temperature: 0.2,
+          maxOutputTokens: 0,
+        }
+      });
+
+      const candidate = response?.candidates?.[0];
+      const outputText = candidate?.content?.parts?.[0]?.text;
+      if (!outputText) {
+        throw new Error('Το Gemini επέστρεψε κενό κείμενο.');
+      }
+
+      console.log(`[AI Report] Επιτυχής παραγωγή πορίσματος (${outputText.length} χαρακτήρες).`);
+      return outputText.trim();
+
+    } catch (err) {
+      lastError = err;
+      const isUnavailable = err?.status === 503 || String(err?.message || '').includes('503');
+
+      if (isUnavailable && attempt < 3) {
+        console.warn(`[AI Report] Προσωρινό 503 στο ${modelName}. Επανάληψη σε 2 δευτερόλεπτα...`);
+        await new Promise((res) => setTimeout(res, 2000));
+        continue;
+      }
+      break;
     }
-  });
-
-  const candidate = response?.candidates?.[0];
-  console.log('[Gemini Finish Reason]:', candidate?.finishReason);
-
-  const outputText = candidate?.content?.parts?.[0]?.text;
-  if (!outputText) {
-    throw new Error('Το Gemini επέστρεψε κενό κείμενο.');
   }
 
-  console.log(`[AI Report] Επιτυχές μέγεθος κειμένου: ${outputText.length} χαρακτήρες.`);
-  return outputText.trim();
+  throw lastError;
 }
 
 router.post('/', integratedAiRateLimit, async (req, res) => {
