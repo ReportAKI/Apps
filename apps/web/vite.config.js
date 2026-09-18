@@ -379,6 +379,7 @@ export default defineConfig({
 		addTransformIndexHtml
 	],
 	server: {
+		host: true,
 		port: 3000,
 		cors: { origin: AllowedEditorOrigins },
 		headers: {
@@ -387,6 +388,7 @@ export default defineConfig({
 		allowedHosts: [
 			'.app-preview.com',
 			'.app-preview.io',
+			'.trycloudflare.com',
 		],
 		fs: {
 			strict: true,

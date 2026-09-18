@@ -1,4 +1,5 @@
-import ExportPage from 'exceljs';
+import React from 'react';
+import ExcelJS from 'exceljs';
 
 export const buildExportModel = ({
   kaek,
@@ -615,7 +616,7 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
 
 // Excel Export (Διατηρείται για συμβατότητα)
 export const exportToExcel = async (model) => {
-  const wb = new ExportPage.Workbook();
+  const wb = new ExcelJS.Workbook();
   const ws = wb.addWorksheet('Αναφορά Ακινήτου');
   ws.columns = [
     { header: 'Πεδίο', key: 'field', width: 40 },
@@ -664,6 +665,16 @@ export const exportToExcel = async (model) => {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
+};
+
+// React Component για χρήση στο Router
+const ExportPage = () => {
+  return (
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <h2>Σελίδα Εξαγωγής Αναφορών</h2>
+      <p>Η εξαγωγή πραγματοποιείται απευθείας από την καρτέλα της αναφοράς.</p>
+    </div>
+  );
 };
 
 export default ExportPage;

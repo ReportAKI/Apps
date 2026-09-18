@@ -8,6 +8,7 @@ import PropertyReportPage from './pages/PropertyReportPage.jsx';
 import ExportPage from './pages/ExportPage.jsx';
 import SearchResultsPage from './pages/SearchResultsPage.jsx';
 
+console.log('Toaster component:', Toaster);
 
 function App() {
   return (
