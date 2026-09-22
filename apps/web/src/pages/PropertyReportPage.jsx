@@ -111,7 +111,10 @@ const FIELD_LABELS = {
   INITIAL_DIAGRAM_URL: 'Αρχικό Διάγραμμα',
   ZON_PROST_TYPE: 'Τύπος Ζώνης Προστασίας',
   PER_ZOE_TITLE: 'Τίτλος ΖΟΕ',
-  OD: 'Ο.Δ.'
+  OD: 'Ο.Δ.',
+  LAU_LABEL3: 'Δημοτική Κοινότητα',
+  LAU_LABEL2: 'Δήμος',
+  LAU_LABEL1: 'Περιφερειακή Ενότητα'
 };
 
 function formatShortAddress({ route, streetNumber, locality, postalCode }) {
@@ -120,157 +123,12 @@ function formatShortAddress({ route, streetNumber, locality, postalCode }) {
   return [streetPart, locality || '', postalPart].filter(Boolean).join(', ');
 }
 
-function getCategoryFinding(category, layer, propertyData, area) {
-  const fullText = `${category?.label || ''} ${layer?.label || ''}`.toLowerCase();
-  const areaTxt = area > 0 ? `${Math.round(area)} τ.μ.` : 'του ακινήτου';
-  const isCommon = propertyData?.description?.toLowerCase().includes('κοινόχρηστ') || 
-                   propertyData?.urbanPlanning?.mainUse?.toLowerCase().includes('κοινόχρηστ');
-
-  let fek = null;
-  let apof = null;
-  let code = null;
-  let name = null;
-
-  if (layer?.records?.[0]) {
-    for (const r of layer.records[0]) {
-      if (r.field === 'FEK') fek = r.value;
-      if (r.field === 'APOF_EIDOS' || r.field === 'APOF_THEME') apof = r.value;
-      if (r.field === 'CODE') code = r.value;
-      if (r.field === 'NAME_GR' || r.field === 'NAME') name = r.value;
-    }
-  }
-
-  if (fullText.includes('κτηματολόγ') || fullText.includes('γεωτεμάχι') || fullText.includes('δημοτικ') || fullText.includes('ενότητ')) {
-    return {
-      badge: 'Επίσημη Κτηματολογική Καταγραφή',
-      title: name ? `Διοικητική Υπαγωγή: ${name}` : 'Καταγεγραμμένο Γεωτεμάχιο Εθνικού Κτηματολογίου',
-      summary: `Το ακίνητο (${areaTxt}) είναι επίσημα καταχωρημένο και εντοπισμένο στα κτηματολογικά διαγράμματα${code ? ` υπό τον κωδικό ενότητας ${code}` : ''}. Η εγγραφή κατοχυρώνει τη χωρική του ταυτότητα και τη διοικητική του αρμοδιότητα.`,
-      cards: [
-        {
-          q: 'Τι ισχύει με την καταγραφή;',
-          a: 'Πιστοποιεί την επίσημη χωρική αποτύπωση, τα όρια και το εμβαδόν του γεωτεμαχίου στην αρμόδια αρχή.'
-        },
-        {
-          q: 'Επιτρέπει άμεση δόμηση;',
-          a: 'Η κτηματολογική καταγραφή ορίζει τη γεωμετρία. Η δυνατότητα δόμησης ρυθμίζεται από τις ισχύουσες ρυμοτομικές γραμμές.'
-        },
-        {
-          q: 'Τι σημαίνει για τον ιδιοκτήτη;',
-          a: 'Παρέχει απόλυτη σαφήνεια για τη θέση, το εμβαδόν και το διοικητικό πλαίσιο στο οποίο υπάγεται το ακίνητο.'
-        }
-      ]
-    };
-  }
-
-  if (fullText.includes('χρήσεις') || fullText.includes('γπσ') || fullText.includes('πολεοδομ')) {
-    if (isCommon) {
-      return {
-        badge: 'Κοινόχρηστος Χώρος / Μη Οικοδομήσιμο Ιδιωτικά',
-        title: 'Μη Οικοδομήσιμο για Ιδιωτική Χρήση / Κοινόχρηστος Χώρος & Πράσινο',
-        summary: `Το γεωτεμάχιο αυτό, παρότι διαθέτει μεγάλο εμβαδόν (${areaTxt}) και θεωρητικούς όρους δόμησης, είναι χαρακτηρισμένο στο Κτηματολόγιο ως «κοινόχρηστος χώρος» και στο Πολεοδομικό Σχέδιο ως «ελεύθερος χώρος - αστικό πράσινο».`,
-        cards: [
-          {
-            q: 'Μπορώ να χτίσω;',
-            a: 'Όχι άμεσα. Οι γενικοί αριθμοί δόμησης είναι θεωρητικοί κανόνες της περιοχής, αλλά δεν εφαρμόζονται σε ιδιωτική ανέγερση εφόσον το ακίνητο παραμένει δεσμευμένο ως κοινόχρηστο.'
-          },
-          {
-            q: 'Τι σημαίνει για τον ιδιοκτήτη;',
-            a: 'Δεν μπορείτε να χτίσετε σπίτι ή ιδιωτική οικοδομή με τον συνηθισμένο τρόπο. Ο χώρος προορίζεται για κοινή χρήση από το κοινό ή για δημοτικές ανάγκες πρασίνου.'
-          },
-          {
-            q: 'Τι ισχύει με τους συντελεστές;',
-            a: 'Αν ήταν κανονικό ιδιωτικό οικόπεδο, οι συντελεστές θα επέτρεπαν δόμηση. Όμως, η χρήση υπερισχύει των αριθμών, καθιστώντας τα μεγέθη αυτά καθαρά θεωρητικά.'
-          }
-        ]
-      };
-    }
-    return {
-      badge: 'Θεσμοθετημένες Χρήσεις Γης',
-      title: 'Καθεστώς Χρήσεων Γης & Επιτρεπόμενες Λειτουργίες',
-      summary: `Οι θεσμοθετημένες χρήσεις γης καθορίζουν το επιτρεπόμενο εύρος λειτουργιών (κατοικία, εμπόριο, κοινωφελείς σκοποί) και προστατεύουν τον οικιστικό χαρακτήρα της περιοχής (${areaTxt}).`,
-      cards: [
-        {
-          q: 'Ποιες χρήσεις επιτρέπονται;',
-          a: 'Επιτρέπονται μόνο οι δραστηριότητες που προβλέπονται από τις γενικές και ειδικές χρήσεις του εγκεκριμένου σχεδίου.'
-        },
-        {
-          q: 'Υπάρχουν απαγορεύσεις;',
-          a: 'Απαγορεύεται κάθε δραστηριότητα που αλλοιώνει τον οικιστικό χαρακτήρα ή προκαλεί περιβαλλοντική όχληση.'
-        },
-        {
-          q: 'Νομική κατοχύρωση;',
-          a: fek ? `Ισχύει βάσει του δημοσιευμένου ΦΕΚ ${fek}.` : 'Πλήρης κανονιστική ισχύς βάσει του επίσημου σχεδίου.'
-        }
-      ]
-    };
-  }
-
-  if (fullText.includes('όροι δόμησης') || fullText.includes('όρων δόμησης') || fullText.includes('ύψος') || fullText.includes('όροφοι') || fullText.includes('αρτιότητα')) {
-    return {
-      badge: 'Πολεοδομικοί Κανόνες & Μεγέθη',
-      title: 'Όροι Δόμησης, Μέγιστο Ύψος & Αρτιότητα',
-      summary: `Οι συντελεστές δόμησης, κάλυψης και τα όρια ύψους καθορίζουν το μέγιστο μέγεθος τυχόν επιτρεπόμενης κτιριακής εγκατάστασης για το γεωτεμάχιο (${areaTxt}).`,
-      cards: [
-        {
-          q: 'Είναι άρτιο το ακίνητο;',
-          a: `Το εμβαδόν (${areaTxt}) καλύπτει τα ελάχιστα όρια κανόνα/παρέκκλισης, με την προϋπόθεση ότι δεν υπάρχει ρυμοτομικό εμπόδιο.`
-        },
-        {
-          q: 'Πώς υπολογίζεται η δόμηση;',
-          a: 'Υπολογίζεται πολλαπλασιάζοντας το καθαρό εμβαδόν με τον Σ.Δ. της περιοχής, εφόσον το ακίνητο είναι οικοδομήσιμο.'
-        },
-        {
-          q: 'Ποιο είναι το μέγιστο ύψος;',
-          a: 'Προσδιορίζεται από τον αριθμό ορόφων και τις ειδικές διατάξεις του ΝΟΚ και της οικείας πολεοδομικής ενότητας.'
-        }
-      ]
-    };
-  }
-
-  if (fullText.includes('αποφάσεις') || fullText.includes('διατάγματα') || fullText.includes('τροποποιήσε') || fullText.includes('ρυμοτομ')) {
-    return {
-      badge: 'Ρυμοτομικό Καθεστώς',
-      title: fek ? `Εγκεκριμένες Πράξεις Ρυμοτομίας (ΦΕΚ ${fek})` : 'Ρυμοτομικές Γραμμές & Πράξεις Σχεδίου',
-      summary: `Οι εγκεκριμένες πράξεις ${apof ? `(${apof}) ` : ''}καθορίζουν τις ρυμοτομικές και οικοδομικές γραμμές και δεσμεύουν τα τμήματα που τίθενται σε κοινή χρήση επί του ακινήτου (${areaTxt}).`,
-      cards: [
-        {
-          q: 'Υφίσταται ρυμοτόμηση;',
-          a: 'Ελέγχεται αν τμήμα ή το σύνολο του γεωτεμαχίου τέμνεται από εγκεκριμένη ρυμοτομική γραμμή ή οδό.'
-        },
-        {
-          q: 'Τι ισχύει για ανέγερση;',
-          a: 'Απαιτείται η πλήρης κύρωση της πράξης εφαρμογής ή αναλογισμού πριν από οποιαδήποτε έκδοση οικοδομικής άδειας.'
-        },
-        {
-          q: 'Ισχύς νομοθεσίας;',
-          a: fek ? `Καθορισμένο με το ΦΕΚ ${fek}.` : 'Ισχύουσα ρυθμιστική πράξη της διοίκησης.'
-        }
-      ]
-    };
-  }
-
-  return {
-    badge: 'Θεσμοθετημένη Ρύθμιση',
-    title: category?.label || 'Πολεοδομικό Πλαίσιο',
-    summary: `Οι θεσμοθετημένες ρυθμίσεις της κατηγορίας αυτής προσδιορίζουν τις πολεοδομικές δεσμεύσεις και το καθεστώς εκμετάλλευσης του ακινήτου (${areaTxt}) σύμφωνα με τα επίσημα δεδομένα.`,
-    cards: [
-      {
-        q: 'Τι αφορά η ρύθμιση;',
-        a: layer?.label || 'Κανονιστικό πλαίσιο της ευρύτερης περιοχής.'
-      },
-      {
-        q: 'Ποια είναι η ισχύς της;',
-        a: 'Εφαρμόζεται άμεσα ως ισχύουσα διάταξη των επίσημων πολεοδομικών φορέων.'
-      }
-    ]
-  };
-}
-
 function getLegislationStatus(data) {
   const valStr = JSON.stringify(data || {}).toLowerCase();
   
-  if (valStr.includes('καταργ') || valStr.includes('ανακλη') || valStr.includes('ακυρω') || valStr.includes('παρωχη')) {
+  if (valStr.includes('καταργ') || valStr.includes('ανακλη') || valStr.includes('ακυρω') || valStr.includes('παρωχη') || valStr.includes('όχι') || valStr.includes('οχι')) {
     return {
+      isValid: false,
       color: 'bg-red-500',
       textColor: 'text-red-700',
       label: 'Δεν ισχύει / Καταργημένο'
@@ -279,6 +137,7 @@ function getLegislationStatus(data) {
   
   if (valStr.includes('παρεκκλ') || valStr.includes('τροποποι') || valStr.includes('υποκει') || valStr.includes('θεωρητικ')) {
     return {
+      isValid: true,
       color: 'bg-amber-500',
       textColor: 'text-amber-700',
       label: 'Ισχύει μερικώς / Ειδικοί όροι'
@@ -286,9 +145,322 @@ function getLegislationStatus(data) {
   }
 
   return {
+    isValid: true,
     color: 'bg-emerald-500',
     textColor: 'text-emerald-700',
     label: 'Ισχύει σήμερα'
+  };
+}
+
+// Ενοποίηση SDIGMAP ΑΥΣΤΗΡΑ στις 4 κατηγορίες (ΜΟΝΟ ΙΣΧΥΟΝΤΑ 2021)
+function consolidateSdigmapCategories(rawCategories) {
+  if (!rawCategories || !Array.isArray(rawCategories)) return [];
+
+  const groups = {
+    ktimatologio: {
+      key: 'ktimatologio',
+      label: 'Γεωτεμάχια Εθνικού Κτηματολογίου',
+      layers: []
+    },
+    urbanPlanning: {
+      key: 'urbanPlanning',
+      label: 'Πολεοδομική Πληροφορία',
+      layers: []
+    },
+    antikeimenikes: {
+      key: 'antikeimenikes',
+      label: 'Ζώνες Τιμών Αντικειμενικού Προσδιορισμού Αξίας Ακινήτων',
+      layers: []
+    },
+    elstat: {
+      key: 'elstat',
+      label: 'Ελληνική Στατιστική Αρχή (ΕΛΣΤΑΤ)',
+      layers: []
+    }
+  };
+
+  const ktimatologioRecords = [];
+  const elstatRecords = [];
+
+  rawCategories.forEach(cat => {
+    const catLabel = (cat.label || '').toLowerCase();
+
+    (cat.layers || []).forEach(layer => {
+      const layerLabel = (layer.label || '').toLowerCase();
+      const combined = `${catLabel} ${layerLabel}`;
+
+      if (layerLabel.includes('2011') || layerLabel.includes('παρωχη') || layerLabel.includes('καταργ')) {
+        return;
+      }
+
+      const validRecords = (layer.records || []).filter(recRows => {
+        const recordData = {};
+        (recRows || []).forEach(f => {
+          if (f?.field && f?.value != null) recordData[f.field] = String(f.value);
+        });
+        return getLegislationStatus(recordData).isValid;
+      });
+
+      if ((layer.records || []).length > 0 && validRecords.length === 0) {
+        return;
+      }
+
+      const cleanRecords = validRecords.length > 0 ? validRecords : layer.records;
+
+      if (combined.includes('κτηματολόγ') || combined.includes('γεωτεμάχι') || combined.includes('δημοτικ')) {
+        (cleanRecords || []).forEach(r => ktimatologioRecords.push(r));
+      } else if (combined.includes('ελστατ') || combined.includes('στατιστικ')) {
+        (cleanRecords || []).forEach(r => elstatRecords.push(r));
+      } else if (combined.includes('αντικειμενικ') || combined.includes('ζώνες τιμών') || combined.includes('απαα')) {
+        groups.antikeimenikes.layers.push({
+          ...layer,
+          records: cleanRecords
+        });
+      } else {
+        const exists = groups.urbanPlanning.layers.some(l => l.label === layer.label);
+        if (!exists) {
+          groups.urbanPlanning.layers.push({
+            ...layer,
+            records: cleanRecords
+          });
+        }
+      }
+    });
+  });
+
+  if (ktimatologioRecords.length > 0) {
+    groups.ktimatologio.layers.push({
+      label: 'Διοικητική Υπαγωγή & Κτηματολογική Καταγραφή (2021)',
+      records: ktimatologioRecords
+    });
+  }
+
+  if (elstatRecords.length > 0) {
+    groups.elstat.layers.push({
+      label: 'Δημογραφικά & Διοικητικά Στοιχεία ΕΛΣΤΑΤ (2021)',
+      records: elstatRecords
+    });
+  }
+
+  return Object.values(groups).filter(g => g.layers.length > 0);
+}
+
+function getCategoryFinding(category, layer, propertyData, area) {
+  const catKey = (category?.key || '').toLowerCase();
+  const catLabel = (category?.label || '').toLowerCase();
+  const layerLabel = (layer?.label || '').toLowerCase();
+  const fullText = `${catKey} ${catLabel} ${layerLabel}`;
+  const areaTxt = area > 0 ? `${Math.round(area)} τ.μ.` : 'του ακινήτου';
+  const isCommon = propertyData?.description?.toLowerCase().includes('κοινόχρηστ') || 
+                   propertyData?.urbanPlanning?.mainUse?.toLowerCase().includes('κοινόχρηστ');
+
+  let fek = null;
+  let code = null;
+  let name = null;
+  let zonePrice = null;
+  let otNum = null;
+  let sdVal = null;
+  let heightVal = null;
+  let floorsVal = null;
+  let mainUse = null;
+
+  if (layer?.records?.[0]) {
+    for (const r of layer.records[0]) {
+      const f = (r.field || '').toUpperCase();
+      const val = String(r.value || '').trim();
+      if (!val) continue;
+
+      if (f === 'FEK') fek = val;
+      if (f === 'CODE' || f === 'SITECODE') code = val;
+      if (f === 'NAME_GR' || f === 'NAME' || f === 'KALL_DHM_NAME') name = val;
+      if (f.includes('TIMH') || f.includes('PRICE') || f.includes('VAL')) zonePrice = val;
+      if (f === 'OT_NUM' || f === 'NUMBER_') otNum = val;
+      if (f === 'SD_TIMH') sdVal = val;
+      if (f === 'MAX_HEIGHT_M') heightVal = val;
+      if (f === 'NUM_OROFON') floorsVal = val;
+      if (f.includes('XRHSH') || f.includes('USE')) mainUse = val;
+    }
+  }
+
+  // 1. ΓΕΩΤΕΜΑΧΙΑ ΕΘΝΙΚΟΥ ΚΤΗΜΑΤΟΛΟΓΙΟΥ (2021)
+  if (catKey === 'ktimatologio' || fullText.includes('κτηματολόγ') || fullText.includes('γεωτεμάχι') || fullText.includes('δημοτικ')) {
+    return {
+      badge: 'Επίσημη Κτηματολογική Καταγραφή (Ισχύουσα 2021)',
+      title: name ? `Διοικητική Υπαγωγή: ${name}` : 'Στοιχεία Γεωτεμαχίου Κτηματολογίου',
+      summary: `Το ακίνητο (${areaTxt}) είναι επίσημα καταγεγραμμένο στα ισχύοντα κτηματολογικά διαγράμματα${code ? ` υπό τον κωδικό ${code}` : ''}.`,
+      cards: [
+        {
+          q: 'Τι αποδεικνύει ο ΚΑΕΚ για το ακίνητό μου;',
+          a: 'Αποδεικνύει τη μοναδική χωρική ταυτότητα, τη θέση και το επίσημο εμβαδόν του γεωτεμαχίου όπως έχει αποτυπωθεί στα διαγράμματα.'
+        },
+        {
+          q: 'Πού χρησιμεύει αυτός ο αριθμός στην πράξη;',
+          a: 'Είναι υποχρεωτικός για οποιαδήποτε πράξη (αγοραπωλησία, αποδοχή κληρονομιάς, γονική παροχή) και για την έκδοση οικοδομικής άδειας.'
+        },
+        {
+          q: 'Τι πρέπει να ελέγξω αν αγοράζω ή πουλάω;',
+          a: 'Να διασταυρώσετε ότι τα τετραγωνικά και τα όρια του Κτηματολογίου ταυτίζονται με το συμβόλαιο και το πρόσφατο εξαρτημένο τοπογραφικό διάγραμμα.'
+        }
+      ]
+    };
+  }
+
+  // 2. ΕΛΛΗΝΙΚΗ ΣΤΑΤΙΣΤΙΚΗ ΑΡΧΗ (2021)
+  if (catKey === 'elstat' || fullText.includes('ελστατ') || fullText.includes('στατιστικ')) {
+    return {
+      badge: 'Στοιχεία Περιοχής & Πληθυσμού (Απογραφή 2021)',
+      title: 'Ισχύον Στατιστικό & Διοικητικό Προφίλ (2021)',
+      summary: `Επίσημα στατιστικά δεδομένα απογραφής της Ελληνικής Στατιστικής Αρχής (ΕΛΣΤΑΤ) 2021 για τη διοικητική περιοχή του ακινήτου (${areaTxt}).`,
+      cards: [
+        {
+          q: 'Σε τι μου χρησιμεύουν αυτά τα στατιστικά στοιχεία;',
+          a: 'Δείχνουν την ισχύουσα διοικητική υπαγωγή, την πυκνότητα των κατοίκων και το είδος των κτιρίων στη γειτονιά, βοηθώντας να καταλάβετε τη δυναμική της περιοχής.'
+        },
+        {
+          q: 'Έχει εμπορική προοπτική η περιοχή;',
+          a: 'Μια πυκνοκατοικημένη περιοχή προσφέρει σταθερή πελατεία για καταστήματα και διαρκή ζήτηση για ενοικιάσεις κατοικιών.'
+        },
+        {
+          q: 'Από πού προέρχονται τα δεδομένα αυτά;',
+          a: 'Προέρχονται από την πρόσφατη επίσημη Γενική Απογραφή Πληθυσμού και Κτιρίων (2021) της ΕΛΣΤΑΤ.'
+        }
+      ]
+    };
+  }
+
+  // 3. ΖΩΝΕΣ ΤΙΜΩΝ ΑΝΤΙΚΕΙΜΕΝΙΚΟΥ ΠΡΟΣΔΙΟΡΙΣΜΟΥ
+  if (catKey === 'antikeimenikes' || fullText.includes('αντικειμενικ') || fullText.includes('ζώνες τιμών') || fullText.includes('απαα')) {
+    const priceTxt = zonePrice ? `${zonePrice} €/τ.μ.` : 'Βάσει πινάκων ΑΠΑΑ';
+    const totalEst = (zonePrice && area > 0) ? `${Math.round(parseFloat(zonePrice) * area).toLocaleString('el-GR')} €` : null;
+
+    return {
+      badge: 'Φορολογική Αξία Ακινήτου',
+      title: code ? `Ζώνη Τιμών: ${code}` : 'Αντικειμενικός Προσδιορισμός Αξίας',
+      summary: `Η Τιμή Ζώνης αποτελεί την επίσημη βάση υπολογισμού του Υπουργείου Οικονομικών για τη φορολογητέα αξία του ακινήτου (${areaTxt}).`,
+      cards: [
+        {
+          q: 'Ποια είναι η τιμή εκκίνησης ανά τετραγωνικό μέτρο;',
+          a: `${priceTxt}${totalEst ? ` (Ενδεικτική βασική αξία γης: ~${totalEst})` : ''}. Αποτελεί τη βάση για τον υπολογισμό όλων των φόρων.`
+        },
+        {
+          q: 'Ποιους φόρους και έξοδα επηρεάζει αυτή η τιμή;',
+          a: 'Καθορίζει τον ετήσιο ΕΝΦΙΑ, τον φόρο μεταβίβασης κατά την αγορά (3%), τα συμβολαιογραφικά έξοδα, τις γονικές παροχές και το ΤΑΠ.'
+        },
+        {
+          q: 'Συμπίπτει η αντικειμενική τιμή με την εμπορική αξία;',
+          a: 'Όχι, η πραγματική τιμή πώλησης (εμπορική) διαμορφώνεται ελεύθερα από την προσφορά και τη ζήτηση στην αγορά.'
+        }
+      ]
+    };
+  }
+
+  // 4. ΠΟΛΕΟΔΟΜΙΚΗ ΠΛΗΡΟΦΟΡΙΑ
+  if (fullText.includes('αποφάσεις') || fullText.includes('διατάγματα') || fullText.includes('τροποποιήσε') || fullText.includes('διαγράμματ')) {
+    return {
+      badge: 'Ρυμοτομικό Σχέδιο & Πράξεις',
+      title: fek ? `Ρυμοτομικές Πράξεις (ΦΕΚ ${fek})` : 'Ρυμοτομικές Γραμμές & Σχέδιο Πόλης',
+      summary: `Το σχέδιο πόλης καθορίζει τη χάραξη των δρόμων, των κοινόχρηστων χώρων και των οικοδομικών τετραγώνων γύρω από το ακίνητο (${areaTxt}).`,
+      cards: [
+        {
+          q: 'Ρυμοτομείται τμήμα του οικοπέδου μου;',
+          a: 'Εάν η εγκεκριμένη ρυμοτομική γραμμή τέμνει το γεωτεμάχιο, το τμήμα που βρίσκεται εκτός οικοδομικού τετραγώνου τίθεται σε κοινή χρήση.'
+        },
+        {
+          q: 'Υπάρχουν εκκρεμότητες σε εισφορές γης ή χρήματος;',
+          a: 'Σε περιοχές που εντάχθηκαν με τον Ν. 1337/1983 απαιτείται κυρωμένη Πράξη Εφαρμογής και τακτοποίηση τυχόν οφειλών για να εκδοθεί άδεια.'
+        },
+        {
+          q: 'Πού ελέγχω αν έχουν γίνει νεότερες τροποποιήσεις;',
+          a: fek ? `Το βασικό πλαίσιο ορίζεται στο ΦΕΚ ${fek}. Τυχόν σημειακές τροποποιήσεις ελέγχονται στο αρχείο της οικείας ΥΔΟΜ.` : 'Στην αρμόδια Υπηρεσία Δόμησης (Πολεοδομία) με τον αριθμό του Οικοδομικού Τετραγώνου.'
+        }
+      ]
+    };
+  }
+
+  if (isCommon && (fullText.includes('χρήσεις') || fullText.includes('κοινόχρηστ'))) {
+    return {
+      badge: 'Ρυμοτομική Δέσμευση / Πράσινο',
+      title: 'Χώρος Κοινόχρηστου Προορισμού',
+      summary: `Βάσει του εγκεκριμένου σχεδίου, ο χώρος αυτός (${areaTxt}) προορίζεται για κοινόχρηστη χρήση ή πράσινο και δεν αποτελεί τυπικό οικοδομήσιμο οικόπεδο.`,
+      cards: [
+        {
+          q: 'Επιτρέπεται η ανέγερση ιδιωτικού κτιρίου;',
+          a: 'Όχι, αποκλείεται η έκδοση οικοδομικής άδειας για ιδιωτική εκμετάλλευση όσο ο χώρος παραμένει δεσμευμένος ως κοινόχρηστος από το σχέδιο πόλεως.'
+        },
+        {
+          q: 'Τι ισχύει με τους συντελεστές δόμησης;',
+          a: 'Οι συντελεστές της περιοχής είναι γενικοί κανόνες. Δεν εφαρμόζονται σε ακίνητα με κοινόχρηστο πολεοδομικό προορισμό.'
+        },
+        {
+          q: 'Ποιο είναι το επόμενο βήμα ελέγχου;',
+          a: 'Απαιτείται έλεγχος στον Δήμο και την Πολεοδομία για το στάδιο της απαλλοτρίωσης ή τυχόν διαδικασία αποζημίωσης/άρσης ρυμοτομικής δέσμευσης.'
+        }
+      ]
+    };
+  }
+
+  if (fullText.includes('χρήσεις') || fullText.includes('γπσ')) {
+    return {
+      badge: 'Θεσμοθετημένες Χρήσεις Γης (ΓΠΣ)',
+      title: mainUse ? `Κατηγορία Χρήσης: ${mainUse}` : 'Επιτρεπόμενες Χρήσεις & Λειτουργίες',
+      summary: `Οι θεσμοθετημένες χρήσεις γης καθορίζουν ποιες οικιστικές ή επαγγελματικές δραστηριότητες επιτρέπεται να εγκατασταθούν στο ακίνητο (${areaTxt}).`,
+      cards: [
+        {
+          q: 'Τι είδους κτίριο ή δραστηριότητα επιτρέπεται;',
+          a: 'Επιτρέπονται όσες λειτουργίες προβλέπει η ζώνη του ΓΠΣ (π.χ. κατοικία, γραφεία, εμπορικά καταστήματα ή κοινωφελείς λειτουργίες).'
+        },
+        {
+          q: 'Μπορώ να ανοίξω κατάστημα ή επιχείρηση;',
+          a: 'Εξαρτάται από τον χαρακτήρα της περιοχής. Σε περιοχές αμιγούς κατοικίας επιτρέπονται μόνο καταστήματα καθημερινών αναγκών, ενώ σε πολεοδομικά κέντρα υπάρχει μεγαλύτερη ευελιξία.'
+        },
+        {
+          q: 'Πώς διασφαλίζομαι πριν από μίσθωση ή αγορά;',
+          a: 'Ζητάτε επίσημη έγγραφη Βεβαίωση Χρήσεων Γης από την αρμόδια ΥΔΟΜ (Πολεοδομία) για τη συγκεκριμένη επαγγελματική δραστηριότητα.'
+        }
+      ]
+    };
+  }
+
+  if (fullText.includes('όροι δόμησης') || fullText.includes('όρων δόμησης') || fullText.includes('ύψος') || fullText.includes('όροφοι') || fullText.includes('αρτιότητα') || fullText.includes('κάλυψη') || fullText.includes('συντελεστής')) {
+    return {
+      badge: 'Πολεοδομικοί Κανόνες Δόμησης',
+      title: 'Δυνατότητα Δόμησης & Επιτρεπόμενα Μεγέθη',
+      summary: `Οι όροι δόμησης καθορίζουν τη μέγιστη επιτρεπόμενη επιφάνεια, την κάλυψη και το ανώτατο ύψος κτιρίου για το γεωτεμάχιο (${areaTxt}).`,
+      cards: [
+        {
+          q: 'Πόσα τετραγωνικά μέτρα κτίσματος επιτρέπεται να κατασκευαστούν;',
+          a: sdVal ? `Με Συντελεστή Δόμησης ${sdVal}, η θεωρητική δόμηση είναι ${Math.round(area * parseFloat(sdVal))} τ.μ., εφόσον το οικόπεδο είναι άρτιο και οικοδομήσιμο.` : 'Προκύπτει από τον πολλαπλασιασμό των καθαρών τετραγωνικών του οικοπέδου με τον Συντελεστή Δόμησης (Σ.Δ.).'
+        },
+        {
+          q: 'Πόσο χώρο στο οικόπεδο μπορεί να καταλάβει το κτίριο;',
+          a: 'Καθορίζεται από το Ποσοστό Κάλυψης (συνήθως 60% ή 70%). Το υπόλοιπο ποσοστό παραμένει υποχρεωτικά ακάλυπτος χώρος.'
+        },
+        {
+          q: 'Ποιο είναι το ανώτατο επιτρεπόμενο ύψος και οι όροφοι;',
+          a: (heightVal || floorsVal) ? `Προβλέπονται έως ${floorsVal ? `${floorsVal} όροφοι` : ''} ${heightVal ? `με μέγιστο ύψος ${heightVal} μ.` : ''} βάσει των ειδικών διατάξεων της περιοχής.` : 'Καθορίζεται από το εγκεκριμένο ρυμοτομικό σχέδιο σε συνδυασμό με τις διατάξεις του ΝΟΚ.'
+        }
+      ]
+    };
+  }
+
+  return {
+    badge: 'Ρυμοτομική Οργάνωση',
+    title: otNum ? `Οικοδομικό Τετράγωνο: Ο.Τ. ${otNum}` : 'Ένταξη σε Οικοδομικό Τετράγωνο',
+    summary: `Το ακίνητο εντάσσεται στον ρυμοτομικό ιστό (${areaTxt}). Οι γραμμές του καθορίζουν τα ακριβή όρια τοποθέτησης του κτιρίου.`,
+    cards: [
+      {
+        q: 'Σε ποιο σημείο του οικοπέδου μπορώ να τοποθετήσω το κτίριο;',
+        a: 'Το κτίριο τοποθετείται υποχρεωτικά πίσω από την Οικοδομική Γραμμή (Ο.Γ.) και εντός των επιτρεπόμενων πλαγίων και οπισθίων αποστάσεων.'
+      },
+      {
+        q: 'Τι είναι το προκήπιο (πρασιά) και τι επιτρέπεται σε αυτό;',
+        a: 'Είναι η ζώνη ανάμεσα στο πεζοδρόμιο (Ρυμοτομική Γραμμή) και το κτίριο. Παραμένει ακάλυπτη και επιτρέπονται μόνο φυτεύσεις και ελαφρές διαμορφώσεις.'
+      },
+      {
+        q: 'Είναι απαραίτητο να υπάρχει διανοιγμένος δρόμος;',
+        a: 'Ναι, για να εκδοθεί οικοδομική άδεια το οικόπεδο πρέπει να έχει πρόσωπο σε δρόμο που έχει διανοιχτεί και τεθεί σε κοινή χρήση.'
+      }
+    ]
   };
 }
 
@@ -307,9 +479,15 @@ function parseLayerRecord(rows) {
     for (const row of rows) {
       if (!row || row.value === undefined || row.value === null || row.value === '') continue;
       const f = row.field;
-      const strVal = String(row.value).trim();
+      let strVal = String(row.value).trim();
       
       if (f && (f.endsWith('_FLAG') || f.includes('FLAG'))) continue;
+
+      // ΚΑΘΑΡΙΣΜΟΣ ΤΕΧΝΙΚΩΝ ΟΡΩΝ ΕΛΣΤΑΤ/GIS
+      // Αντικατάσταση του «ΨΕΥΔΟΔΗΜΟΤΙΚΗ ΚΟΙΝΟΤΗΤΑ» σε καθαρή «Δημοτική Κοινότητα»
+      if (strVal.includes('ΨΕΥΔΟ')) {
+        strVal = strVal.replace(/ΨΕΥΔΟΔΗΜΟΤΙΚΗ\s+ΚΟΙΝΟΤΗΤΑ/gi, 'Δημοτική Κοινότητα').trim();
+      }
 
       data[f] = strVal;
 
@@ -416,7 +594,6 @@ const PropertyReportPage = () => {
   const [includeMapInExport, setIncludeMapInExport] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
 
-  // States για το In-App Preview Modal
   const [previewHtml, setPreviewHtml] = useState(null);
   const previewIframeRef = useRef(null);
 
@@ -425,10 +602,18 @@ const PropertyReportPage = () => {
   const area = getPolygonArea(leafletPolygonCoords);
   const perimeter = getPolygonPerimeter(leafletPolygonCoords);
   const coords = propertyData?.coordinates;
-  const selectedCategory = sdigmap ? sdigmap.categories.find(cat => cat.key === selectedCategoryKey) || null : null;
-  const selectedLayer = selectedCategory ? selectedCategory.layers[selectedLayerIndex] || selectedCategory.layers[0] || null : null;
-  const selectedExportCount = Object.values(selectedCategoryKeys).filter(Boolean).length;
 
+  // Ενοποιημένες 4 κατηγορίες SDIGMAP
+  const consolidatedCategories = useMemo(() => {
+    return consolidateSdigmapCategories(sdigmap?.categories);
+  }, [sdigmap]);
+
+  const selectedCategory = consolidatedCategories.find(cat => cat.key === selectedCategoryKey) || consolidatedCategories[0] || null;
+  const selectedLayer = selectedCategory ? (selectedCategory.layers[selectedLayerIndex] || selectedCategory.layers[0] || null) : null;
+  
+  // Υπολογισμός επιλεγμένων για το modal εξαγωγής (από τις 4 κατηγορίες)
+  const selectedExportCount = Object.keys(selectedCategoryKeys).filter(k => selectedCategoryKeys[k] && consolidatedCategories.some(c => c.key === k)).length;
+  
   const buildingStats = useMemo(() => extractGlobalBuildingStats(sdigmap?.categories), [sdigmap]);
 
   const isBuildingTermsActive = useMemo(() => {
@@ -546,9 +731,10 @@ const PropertyReportPage = () => {
     }));
   }
 
+  // Ενημέρωση όλων των 4 κατηγοριών στο Modal
   function toggleAllExportCategories(value) {
     const updated = {};
-    (sdigmap?.categories || []).forEach(cat => {
+    consolidatedCategories.forEach(cat => {
       updated[cat.key] = value;
     });
     setSelectedCategoryKeys(updated);
@@ -593,7 +779,7 @@ const PropertyReportPage = () => {
         area: area > 0 ? area : (propertyData?.area || 0),
         perimeter: perimeter > 0 ? perimeter : (propertyData?.perimeter || 0),
         coords: resolvedCoords,
-        sdigmap,
+        sdigmap: { ...sdigmap, categories: consolidatedCategories },
         fieldLabels: FIELD_LABELS,
         selectedCategoryKeys: selectedKeys,
         mapImageDataUrl
@@ -631,7 +817,7 @@ const PropertyReportPage = () => {
     if (!location.state?.propertyData && id) {
       fetchByKaek(id);
     }
-  }, [id]);
+  }, [id, location.state?.propertyData]);
 
   useEffect(() => {
     if (kaek) {
@@ -643,14 +829,14 @@ const PropertyReportPage = () => {
   }, [kaek]);
 
   useEffect(() => {
-    if (sdigmap && sdigmap.categories.length > 0) {
-      setSelectedCategoryKey(sdigmap.categories[0].key);
+    if (consolidatedCategories.length > 0) {
+      setSelectedCategoryKey(consolidatedCategories[0].key);
       setSelectedLayerIndex(0);
     } else {
       setSelectedCategoryKey(null);
       setSelectedLayerIndex(0);
     }
-  }, [sdigmap]);
+  }, [consolidatedCategories]);
 
   useEffect(() => {
     if (!propertyData) return;
@@ -667,17 +853,27 @@ const PropertyReportPage = () => {
     }
   }, [propertyData]);
 
+  // Αρχικοποίηση επιλογών εξαγωγής για τις 4 ενοποιημένες κατηγορίες (4/4)
   useEffect(() => {
-    if (sdigmap?.categories?.length) {
+    if (consolidatedCategories.length > 0) {
       const initial = {};
-      sdigmap.categories.forEach(cat => {
+      consolidatedCategories.forEach(cat => {
         initial[cat.key] = true;
       });
       setSelectedCategoryKeys(initial);
     } else {
       setSelectedCategoryKeys({});
     }
-  }, [sdigmap]);
+  }, [consolidatedCategories]);
+
+  const currentViewLabel = useMemo(() => {
+    if (!selectedCategory) return 'Επιλογή κατηγορίας';
+    if (selectedCategory.layers.length <= 1) {
+      return selectedCategory.label;
+    }
+    const currentLayer = selectedCategory.layers[selectedLayerIndex] || selectedCategory.layers[0];
+    return currentLayer ? `${selectedCategory.label}: ${currentLayer.label}` : selectedCategory.label;
+  }, [selectedCategory, selectedLayerIndex]);
 
   if (isLoading) {
     return (
@@ -769,44 +965,65 @@ const PropertyReportPage = () => {
                 <h2 className="text-lg md:text-xl font-bold text-gray-900 tracking-tight">Δεδομένα Ακινήτου ανά Επίπεδο</h2>
               </div>
 
-              {sdigmap && sdigmap.categories.length > 0 && <DropdownMenu>
+              {consolidatedCategories.length > 0 && (
+                <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button className="inline-flex items-center gap-2 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-full px-4 py-2 hover:bg-gray-50 transition-all shadow-2xs active:scale-[0.98]">
                       <Filter className="w-3.5 h-3.5 text-gray-500" />
-                      {selectedCategory ? selectedCategory.label : 'Επιλογή κατηγορίας'}
+                      <span className="max-w-[240px] truncate">{currentViewLabel}</span>
                       <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
                     </button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="max-w-xs w-72 shadow-xl rounded-2xl border border-gray-100 p-1.5 bg-white" sideOffset={6}>
-                    {sdigmap.categories.map(cat => {
+                  <DropdownMenuContent align="end" className="max-w-xs w-80 shadow-xl rounded-2xl border border-gray-100 p-1.5 bg-white" sideOffset={6}>
+                    {consolidatedCategories.map(cat => {
+                      const isCatActive = selectedCategoryKey === cat.key;
+                      
+                      // Κατηγορίες με 1 ενιαία καρτέλα (Κτηματολόγιο, ΕΛΣΤΑΤ)
                       if (cat.layers.length === 1) {
-                        return <DropdownMenuItem key={cat.key} onSelect={() => {
-                          setSelectedCategoryKey(cat.key);
-                          setSelectedLayerIndex(0);
-                        }} className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-sm font-medium transition-colors ${selectedCategoryKey === cat.key ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-50'}`}>
+                        return (
+                          <DropdownMenuItem
+                            key={cat.key}
+                            onSelect={() => {
+                              setSelectedCategoryKey(cat.key);
+                              setSelectedLayerIndex(0);
+                            }}
+                            className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-sm font-medium transition-colors ${isCatActive ? 'bg-gray-100 text-gray-900 font-bold' : 'text-gray-700 hover:bg-gray-50'}`}
+                          >
                             <span>{cat.label}</span>
-                            {selectedCategoryKey === cat.key && <Check className="w-3.5 h-3.5 text-gray-600 shrink-0" />}
-                          </DropdownMenuItem>;
+                            {isCatActive && <Check className="w-3.5 h-3.5 text-gray-600 shrink-0" />}
+                          </DropdownMenuItem>
+                        );
                       }
-                      return <DropdownMenuSub key={cat.key}>
-                          <DropdownMenuSubTrigger className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-sm font-medium transition-colors w-full ${selectedCategoryKey === cat.key ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-50'}`}>
+
+                      // Πολεοδομική Πληροφορία με τα επιμέρους επίπεδα
+                      return (
+                        <DropdownMenuSub key={cat.key}>
+                          <DropdownMenuSubTrigger className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-sm font-medium transition-colors w-full ${isCatActive ? 'bg-gray-100 text-gray-900 font-bold' : 'text-gray-700 hover:bg-gray-50'}`}>
                             <span>{cat.label}</span>
                           </DropdownMenuSubTrigger>
                           <DropdownMenuPortal>
-                            <DropdownMenuSubContent className="max-w-xs w-64 shadow-xl rounded-2xl border border-gray-100 p-1.5 bg-white" sideOffset={4}>
-                              {cat.layers.map((layer, li) => <DropdownMenuItem key={li} onSelect={() => {
-                                  setSelectedCategoryKey(cat.key);
-                                  setSelectedLayerIndex(li);
-                                }} className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-sm transition-colors ${selectedCategoryKey === cat.key && selectedLayerIndex === li ? 'bg-gray-100 text-gray-900 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium'}`}>
+                            <DropdownMenuSubContent className="max-w-xs w-72 shadow-xl rounded-2xl border border-gray-100 p-1.5 bg-white" sideOffset={4}>
+                              {cat.layers.map((layer, li) => (
+                                <DropdownMenuItem 
+                                  key={li} 
+                                  onSelect={() => {
+                                    setSelectedCategoryKey(cat.key);
+                                    setSelectedLayerIndex(li);
+                                  }} 
+                                  className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-sm transition-colors ${isCatActive && selectedLayerIndex === li ? 'bg-gray-100 text-gray-900 font-semibold' : 'text-gray-700 hover:bg-gray-50 font-medium'}`}
+                                >
                                   <span>{layer.label}</span>
-                                  {selectedCategoryKey === cat.key && selectedLayerIndex === li && <Check className="w-3.5 h-3.5 text-gray-600 shrink-0" />}
-                                </DropdownMenuItem>)}
+                                  {isCatActive && selectedLayerIndex === li && <Check className="w-3.5 h-3.5 text-gray-600 shrink-0" />}
+                                </DropdownMenuItem>
+                              ))}
                             </DropdownMenuSubContent>
                           </DropdownMenuPortal>
-                        </DropdownMenuSub>;
+                        </DropdownMenuSub>
+                      );
                     })}
                   </DropdownMenuContent>
-                </DropdownMenu>}
+                </DropdownMenu>
+              )}
             </div>
 
             {sdigmapLoading ? (
@@ -824,7 +1041,7 @@ const PropertyReportPage = () => {
                   <RefreshCw className="w-3.5 h-3.5" /> Δοκιμάστε ξανά
                 </button>
               </div>
-            ) : sdigmap && sdigmap.categories.length > 0 && selectedLayer ? (
+            ) : consolidatedCategories.length > 0 && selectedLayer ? (
               <div className="bg-white border border-gray-200/90 rounded-3xl p-6 md:p-8 shadow-xs flex flex-col gap-6">
                 
                 {/* Επικεφαλίδα Καρτέλας */}
@@ -915,50 +1132,37 @@ const PropertyReportPage = () => {
                         <span className="text-gray-600 font-medium">Θεωρητική Μέγιστη Κάλυψη:</span>
                         <span className="font-extrabold text-gray-900">{coveragePercent}% × {effectiveArea} = {theoreticalCoverage.toLocaleString('el-GR')} τ.μ.</span>
                       </div>
-                      <p className="text-[11.5px] text-gray-400 italic pt-1 border-t border-gray-200/60">
-                        * Σημείωση: Οι υπολογισμοί είναι θεωρητικοί βάσει συντελεστών περιοχής και δεν τεκμηριώνουν από μόνοι τους δυνατότητα ανέγερσης.
-                      </p>
-                    </div>
-
-                    <div className="bg-[#f0fdf4]/70 border border-emerald-200/70 rounded-2xl p-4 flex flex-col gap-2 shadow-2xs">
-                      <div className="flex items-center gap-2 text-emerald-800 font-bold text-sm">
-                        <Scale className="w-4 h-4 shrink-0" />
-                        <span>Όρια Αρτιότητας:</span>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs md:text-[13px] text-gray-700">
-                        <div><span className="font-semibold text-gray-900">Κατά κανόνα:</span> {buildingStats.ruleArt}</div>
-                        <div><span className="font-semibold text-gray-900">Κατά παρέκκλιση:</span> {buildingStats.deviationArt}</div>
-                      </div>
-                      <p className="text-xs text-gray-600 leading-relaxed pt-1">
-                        Το γεωτεμάχιο υπερκαλύπτει τα ελάχιστα όρια αρτιότητας ({effectiveArea} τ.μ. &gt; 200 τ.μ.), όμως αυτό από μόνο του δεν επαρκεί για ανέγερση κτιρίου λόγω του κοινόχρηστου χαρακτήρα του.
-                      </p>
                     </div>
                   </div>
                 )}
 
-                {/* Πλακίδια Δεδομένων */}
+                {/* Πλακίδια Δεδομένων: εμφανίζονται ΜΟΝΟ όσα ισχύουν */}
                 <div className="flex flex-col gap-8">
                   {selectedLayer.records.map((rows, ri) => {
                     const { tiles, legislationText, links, status } = parseLayerRecord(rows);
+                    if (!status.isValid) return null; // Απόκρυψη εγγραφών που δεν ισχύουν
+
                     return (
                       <div key={ri} className="flex flex-col gap-4 pt-2 first:pt-0">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
-                          {tiles.map((tile, ti) => (
-                            <div 
-                              key={ti} 
-                              className="bg-[#f8fafc] border border-gray-200/80 rounded-2xl p-4 flex flex-col justify-between min-h-[78px] hover:border-teal-300 hover:bg-teal-50/20 transition-all shadow-2xs"
-                            >
-                              <div className="flex items-center justify-between gap-2 mb-2">
-                                <span className="text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
-                                  {tile.label}
-                                </span>
+                        {tiles.length > 0 && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
+                            {tiles.map((tile, ti) => (
+                              <div 
+                                key={ti} 
+                                className="bg-[#f8fafc] border border-gray-200/80 rounded-2xl p-4 flex flex-col justify-between min-h-[78px] hover:border-teal-300 hover:bg-teal-50/20 transition-all shadow-2xs"
+                              >
+                                <div className="flex items-center justify-between gap-2 mb-2">
+                                  <span className="text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
+                                    {tile.label}
+                                  </span>
+                                </div>
+                                <p className="text-[14.5px] md:text-[15px] font-bold text-gray-900 break-words leading-snug">
+                                  {tile.value}
+                                </p>
                               </div>
-                              <p className="text-[14.5px] md:text-[15px] font-bold text-gray-900 break-words leading-snug">
-                                {tile.value}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
+                            ))}
+                          </div>
+                        )}
 
                         <div className="bg-[#fcfbf9] border border-[#eee8dc] rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-2xs">
                           <div className="flex items-center gap-3">
@@ -999,7 +1203,7 @@ const PropertyReportPage = () => {
               </div>
             ) : (
               <p className="text-gray-600 bg-white p-6 rounded-2xl border border-gray-200 text-[15px] leading-relaxed shadow-2xs">
-                Δεν βρέθηκαν πολεοδομικά / γεωχωρικά δεδομένα SDIGMAP που να τέμνουν αυτό το ακίνητο.
+                Δεν βρέθηκαν ισχύοντα πολεοδομικά / γεωχωρικά δεδομένα SDIGMAP για αυτό το ακίνητο.
               </p>
             )}
           </section>
@@ -1070,7 +1274,7 @@ const PropertyReportPage = () => {
         <Footer />
       </div>
 
-      {/* Παράθυρο (Dialog) Επιλογής */}
+      {/* Παράθυρο (Dialog) Επιλογής Εξαγωγής - ΑΥΣΤΗΡΑ 4 ΚΑΤΗΓΟΡΙΕΣ (4/4) */}
       <Dialog open={exportDialogOpen} onOpenChange={setExportDialogOpen}>
         <DialogContent className="max-w-md rounded-3xl p-6">
           <DialogHeader>
@@ -1088,11 +1292,11 @@ const PropertyReportPage = () => {
               <Checkbox id="export-include-map" checked={includeMapInExport} onCheckedChange={v => setIncludeMapInExport(!!v)} />
             </label>
 
-            {sdigmap && sdigmap.categories.length > 0 ? (
+            {consolidatedCategories && consolidatedCategories.length > 0 ? (
               <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-2xs">
                 <div className="flex items-center justify-between px-4 py-2.5 bg-gray-50 border-b border-gray-200">
                   <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-                    Κατηγορίες δεδομένων ({selectedExportCount}/{sdigmap.categories.length})
+                    Κατηγορίες δεδομένων ({selectedExportCount}/{consolidatedCategories.length})
                   </span>
                   <div className="flex gap-3">
                     <button type="button" onClick={() => toggleAllExportCategories(true)} className="text-xs font-semibold text-blue-600 hover:underline">Όλες</button>
@@ -1100,17 +1304,17 @@ const PropertyReportPage = () => {
                   </div>
                 </div>
                 <div className="divide-y divide-gray-100 max-h-[30vh] overflow-y-auto">
-                  {sdigmap.categories.map(cat => (
+                  {consolidatedCategories.map(cat => (
                     <label key={cat.key} htmlFor={`export-cat-${cat.key}`} className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors">
                       <Checkbox id={`export-cat-${cat.key}`} checked={!!selectedCategoryKeys[cat.key]} onCheckedChange={() => toggleExportCategory(cat.key)} />
-                      <span className="text-sm text-gray-800">{cat.label}</span>
+                      <span className="text-sm font-medium text-gray-800">{cat.label}</span>
                     </label>
                   ))}
                 </div>
               </div>
             ) : (
               <p className="text-sm text-gray-500 bg-gray-50 rounded-2xl px-4 py-3 border border-gray-100">
-                Δεν υπάρχουν διαθέσιμες κατηγορίες δεδομένων SDIGMAP για εξαγωγή.
+                Δεν υπάρχουν διαθέσιμες κατηγορίες δεδομένων για εξαγωγή.
               </p>
             )}
           </div>

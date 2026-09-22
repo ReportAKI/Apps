@@ -15,9 +15,6 @@ const allDeps = Object.keys(pkg.dependencies || {});
 
 const isDev = process.env.NODE_ENV !== 'production';
 
-// Only the reportaki editor may read this dev server cross-origin. `cors: true`
-// sends `Access-Control-Allow-Origin: *`, which lets any site read the source
-// transforms and call the dev-only APIs.
 const AllowedEditorOrigins = [
 	'https://reportaki.app.com',
 	'https://reportaki.app.dev',
@@ -91,9 +88,9 @@ window.onerror = (message, source, lineno, colno, errorObj) => {
 
 const configreportakiConsoleErrorHandler = `
 const originalConsoleError = console.error;
-const MATCH_LINE_COL_REGEX = /:(\\d+):(\\d+)\\)?\\s*$/; // regex to match the :lineNum:colNum
-const MATCH_AT_REGEX = /^\\s*at\\s+(?:async\\s+)?(?:.*?\\s+)?\\(?/; // regex to remove the 'at' keyword and any 'async' or function name
-const MATCH_PATH_REGEX = /^\\//; // regex to remove the leading slash
+const MATCH_LINE_COL_REGEX = /:(\\d+):(\\d+)\\)?\\s*$/;
+const MATCH_AT_REGEX = /^\\s*at\\s+(?:async\\s+)?(?:.*?\\s+)?\\(?/;
+const MATCH_PATH_REGEX = /^\\//;
 
 function parseStackFrameLine(line) {
 	const lineColMatch = line.match(MATCH_LINE_COL_REGEX);
@@ -176,12 +173,9 @@ console.warn = function(...args) {
 `;
 
 const configWindowFetchMonkeyPatch = `
-// Prevents authentication failures (PB returns 400) from crashing the app — use console.info, not console.error/PM2.
-// [urlPattern, bodyPattern] tuples; align with sandboxErrorUtils ERROR_BLACKLIST.
 const BENIGN_FETCH_ERRORS = [
 	[/hcgi\\/platform\\/api\\/collections\\/.*auth-with-password.*/i, /Failed to authenticate/i],
 	[/hcgi\\/api\\//i, /Insufficient credits/i],
-	// A user-supplied integration secret (Stripe/PayPal/Twilio/...) is not set yet — an expected setup state, not a bug to fix.
 	[/hcgi\\/api\\//i, /INTEGRATION_NOT_CONFIGURED/i],
 ];
 
@@ -225,7 +219,6 @@ const originalFetch = window.fetch;
 window.fetch = function(...args) {
 	const url = args[0] instanceof Request ? args[0].url : args[0];
 
-	// Skip WebSocket URLs
 	if (url.startsWith('ws:') || url.startsWith('wss:')) {
 		return originalFetch.apply(this, args);
 	}
@@ -234,7 +227,6 @@ window.fetch = function(...args) {
 		.then(async response => {
 			const contentType = response.headers.get('Content-Type') || '';
 
-			// Exclude HTML document responses
 			const isDocumentResponse =
 				contentType.includes('text/html') ||
 				contentType.includes('application/xhtml+xml');
@@ -258,7 +250,6 @@ window.fetch = function(...args) {
 		})
 		.catch(error => {
 			if (!url.match(/\.html?$/i)) {
-				// Cancelled in-flight fetch (e.g. preview reload) — not a server failure.
 				if (error?.name === 'AbortError') {
 					console.info(error);
 				} else {
@@ -357,8 +348,8 @@ const addTransformIndexHtml = {
 
 console.warn = () => { };
 
-const logger = createLogger()
-const loggerError = logger.error
+const logger = createLogger();
+const loggerError = logger.error;
 
 logger.error = (msg, options) => {
 	if (options?.error?.toString().includes('CssSyntaxError: [postcss]')) {
@@ -366,7 +357,7 @@ logger.error = (msg, options) => {
 	}
 
 	loggerError(msg, options);
-}
+};
 
 export default defineConfig({
 	optimizeDeps: {
@@ -381,15 +372,46 @@ export default defineConfig({
 	server: {
 		host: true,
 		port: 3000,
-		cors: { origin: AllowedEditorOrigins },
-		headers: {
-			'Cross-Origin-Embedder-Policy': 'credentialless',
+		proxy: {
+			'/arcgis': {
+				target: 'http://localhost:3001',
+				changeOrigin: true,
+			},
+			'/sdigmap-full': {
+				target: 'http://localhost:3001',
+				changeOrigin: true,
+			},
+			'/reverse-geocode': {
+				target: 'http://localhost:3001',
+				changeOrigin: true,
+			},
+			'/property-summary': {
+				target: 'http://localhost:3001',
+				changeOrigin: true,
+			},
+			'/export': {
+				target: 'http://localhost:3001',
+				changeOrigin: true,
+			},
+			'/contact': {
+				target: 'http://localhost:3001',
+				changeOrigin: true,
+			},
+			'/api/collections': {
+				target: 'http://127.0.0.1:8090',
+				changeOrigin: true,
+			},
+			'/api/files': {
+				target: 'http://127.0.0.1:8090',
+				changeOrigin: true,
+			},
+			'/api': {
+				target: 'http://localhost:3001',
+				changeOrigin: true,
+			},
 		},
-		allowedHosts: [
-			'.app-preview.com',
-			'.app-preview.io',
-			'.trycloudflare.com',
-		],
+		cors: true,
+		allowedHosts: true,
 		fs: {
 			strict: true,
 			allow: [

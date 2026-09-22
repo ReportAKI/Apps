@@ -1,6 +1,8 @@
 import Pocketbase from 'pocketbase';
 
-const pocketbaseClient = new Pocketbase('http://localhost:8090');
+const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://127.0.0.1:8090';
+
+const pocketbaseClient = new Pocketbase(baseUrl);
 
 export default pocketbaseClient;
 export { pocketbaseClient };

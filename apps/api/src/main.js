@@ -37,11 +37,22 @@ process.on('SIGTERM', async () => {
 	process.exit();
 });
 
-app.use(helmet());
+// 1. Προσαρμογή του Helmet ώστε να μην μπλοκάρει πόρους και HTTP κλήσεις στο τοπικό δίκτυο
+app.use(helmet({
+	contentSecurityPolicy: false,
+	crossOriginResourcePolicy: false,
+	crossOriginEmbedderPolicy: false
+}));
+
+// 2. Ρύθμιση CORS: Επιτρέπει τόσο το localhost όσο και όλες τις διευθύνσεις του τοπικού δικτύου (κινητά Android/iOS)
 app.use(cors({
-	origin: process.env.CORS_ORIGIN,
+	origin: (origin, callback) => {
+		// Επιτρέπονται εργαλεία χωρίς origin (π.χ. mobile webviews/apps, curl, postman) ή οποιοδήποτε origin στο local dev
+		callback(null, true);
+	},
 	credentials: true,
 }));
+
 app.use(morgan('combined'));
 app.use(globalRateLimit);
 app.use(express.json({
@@ -60,10 +71,11 @@ app.use((req, res) => {
 	res.status(404).json({ error: 'Route not found' });
 });
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-	logger.info(`🚀 API Server running on http://localhost:${port}`);
+// 3. Δεσμεύουμε την ακρόαση στο 0.0.0.0 ώστε να δέχεται συνδέσεις από κινητά στο Wi-Fi
+app.listen(port, '0.0.0.0', () => {
+	logger.info(`🚀 API Server running on http://0.0.0.0:${port} (Accessible locally via your PC IP)`);
 });
 
 export default app;

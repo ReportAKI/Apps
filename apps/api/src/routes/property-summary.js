@@ -96,6 +96,34 @@ function buildCompletePropertyPrompt({ kaek, geoData, area, perimeter, coords, s
   return lines.join('\n');
 }
 
+// Δυναμική επιλογή διαθέσιμου μοντέλου από το ίδιο το Google API
+async function resolveActiveModel(ai) {
+  try {
+    const listRes = await ai.models.list();
+    const available = [];
+    for await (const m of listRes) {
+      const name = (m.name || '').replace(/^models\//, '');
+      if (name.includes('gemini')) {
+        available.push(name);
+      }
+    }
+
+    // Προτεραιότητες μοντέλων
+    const priority = ['gemini-3.6-flash', 'gemini-3.6-pro', 'gemini-2.5-pro', 'gemini-flash'];
+    for (const p of priority) {
+      const match = available.find(m => m === p || m.includes(p));
+      if (match) return match;
+    }
+
+    if (available.length > 0) return available[0];
+  } catch (err) {
+    console.warn('[AI Report] Σφάλμα ανάκτησης δυναμικής λίστας μοντέλων:', err?.message || err);
+  }
+
+  // Ασφαλής προεπιλογή
+  return 'gemini-3.6-flash';
+}
+
 async function callGemini({ systemPrompt, userMessage }) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
@@ -103,12 +131,13 @@ async function callGemini({ systemPrompt, userMessage }) {
   }
 
   const ai = new GoogleGenAI({ apiKey });
-  const modelName = 'gemini-3.6-flash';
+  const modelName = await resolveActiveModel(ai);
+
   let lastError = null;
 
-  for (let attempt = 1; attempt <= 3; attempt++) {
+  for (let attempt = 1; attempt <= 2; attempt++) {
     try {
-      console.log(`[AI Report] Κλήση μοντέλου ${modelName} (Προσπάθεια ${attempt}/3)...`);
+      console.log(`[AI Report] Κλήση μοντέλου ${modelName} (Προσπάθεια ${attempt}/2)...`);
 
       const response = await ai.models.generateContent({
         model: modelName,
@@ -116,7 +145,6 @@ async function callGemini({ systemPrompt, userMessage }) {
         config: {
           systemInstruction: systemPrompt,
           temperature: 0.2,
-          maxOutputTokens: 0,
         }
       });
 
@@ -126,23 +154,28 @@ async function callGemini({ systemPrompt, userMessage }) {
         throw new Error('Το Gemini επέστρεψε κενό κείμενο.');
       }
 
-      console.log(`[AI Report] Επιτυχής παραγωγή πορίσματος (${outputText.length} χαρακτήρες).`);
+      console.log(`[AI Report] Επιτυχής παραγωγή πορίσματος με ${modelName} (${outputText.length} χαρακτήρες).`);
       return outputText.trim();
 
     } catch (err) {
       lastError = err;
-      const isUnavailable = err?.status === 503 || String(err?.message || '').includes('503');
+      const errMsg = err?.message || String(err);
+      console.warn(`[AI Report Error στο ${modelName}]:`, errMsg);
 
-      if (isUnavailable && attempt < 3) {
-        console.warn(`[AI Report] Προσωρινό 503 στο ${modelName}. Επανάληψη σε 2 δευτερόλεπτα...`);
+      const isRateLimit = err?.status === 429 || errMsg.includes('429') || errMsg.includes('quota');
+      const isUnavailable = err?.status === 503 || errMsg.includes('503');
+
+      if ((isRateLimit || isUnavailable) && attempt < 2) {
+        console.warn(`[AI Report] Αναμονή 2 δευτερολέπτων πριν από επανάληψη...`);
         await new Promise((res) => setTimeout(res, 2000));
         continue;
       }
+
       break;
     }
   }
 
-  throw lastError;
+  throw lastError || new Error('Η κλήση στο Gemini απέτυχε.');
 }
 
 router.post('/', integratedAiRateLimit, async (req, res) => {
