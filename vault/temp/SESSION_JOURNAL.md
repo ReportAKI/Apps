@@ -12,3 +12,241 @@
     Summary fetch error: Error: {"error":{"code":503,"message":"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.","status":"UNAVAILABLE"}}
         at fetchSummary (http://172.30.2.142:3000/src/pages/PropertyReportPage.jsx:656:15)
 
+## 2026-09-23 08:53:54.811Z load
+- url: http://172.30.2.142:3000/
+- title: ReportAKI
+
+## 2026-09-23 08:53:57.363Z navigate
+- url: http://172.30.2.142:3000/
+- via: replaceState
+
+## 2026-09-23 08:54:13.046Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 08:54:13.180Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 08:54:59.534Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 08:55:05.281Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:03:07.233Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:08:54.234Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:10:18.859Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:11:16.413Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:11:56.320Z load
+- url: http://localhost:3000/
+- title: ReportAKI
+
+## 2026-09-23 09:12:40.406Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:13:09.324Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:13:51.450Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:14:08.339Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:14:21.092Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:22:13.816Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:24:18.352Z load
+- url: https://soft-comics-peel.loca.lt/
+- title: ReportAKI
+
+## 2026-09-23 09:25:02.499Z load
+- url: https://soft-comics-peel.loca.lt/
+- title: ReportAKI
+
+## 2026-09-23 09:29:40.064Z load
+- url: http://172.30.2.142:3000/
+- title: ReportAKI
+
+## 2026-09-23 09:29:40.645Z navigate
+- url: http://172.30.2.142:3000/
+- via: replaceState
+
+## 2026-09-23 09:39:09.369Z load
+- url: http://172.30.2.142:3000/
+- title: ReportAKI
+
+## 2026-09-23 09:39:34.662Z load
+- url: https://hot-lights-grin.loca.lt/
+- title: ReportAKI
+
+## 2026-09-23 09:39:53.201Z click
+- element: {"tag":"html","role":null,"ariaLabel":null,"name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"\n    import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$RefreshSig$ = () => (type) => type;\n\n    \n\n    \n    \n    \n    \n    ReportAKI\n    const SITE_PAGES_ENDPOINT = '/__reportaki/site-pages';\n\nconst OUTGOING_SITE_PAGES_MESSAGE = 'sitePages';\nconst INCOMING_REQUEST_SITE_PAGES_MESSAGE = 'request-site-pages';\n\nconst ALLOWED_PARENT_ORIGINS = [\n\t'https://reportaki.app.com',\n\t'https://reportaki.app.dev',\n\t'https://reportaki-frontend-local.app.dev',\n\t'http://localhost:4000',\n];\n\nfunction postSitePages(pages) {\n\tlet parentOrigin = window.location.ancestorOrigins?.[0];\n\tif (!parentOrigin && document.referrer) {\n\t\ttry {\n\t\t\tparentOrigin = new URL(document.referrer).origin;\n\t\t} catch {}\n\t}\n\tif (parentOrigin && ALLOWED_PARENT_ORIGINS.includes(parentOrigin)) {\n\t\twindow.parent.postMessage({ type: OUTGOING_SITE_PAGES_MESSAGE, payload: { pages } }, parentOrigin);\n\t}\n}\n\nasync function sendSitePagesToParent() {\n\tif (window.self === window.top) {\n\t\treturn;\n\t}\n\n\ttry {\n\t\tconst response = await fetch(SITE_PAGES_ENDPOINT);\n\t\tif (!response.ok) {\n\t\t\tthrow new Error(`HTTP ${response.status}`);\n\t\t}\n\t\tpostSitePages(await response.json());\n\t} catch (error) {\n\t\tconsole.error('[site-pages] Failed to send site pages to parent:', error);\n\t}\n}\n\nif (window.self !== window.top) {\n\twindow.addEventListener('load', sendSitePagesToParent);\n\twindow.addEventListener('message', (event) => {\n\t\tif (event.data?.type === INCOMING_REQUEST_SITE_PAGES_MESSAGE) {\n\t\t\tsendSitePagesToParent();\n\t\t}\n\t});\n}\n\n    \n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-id],\n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-assisted-id] {\n\t\tcursor: default !important;\n\t\toverflow-wrap: anywhere;\n\t}\n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-id][contenteditable=\"true\"],\n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-assisted-id][contenteditable=\"true\"] {\n\t\toutline: 1px solid #673DE6;\n\t\tcaret-color: currentColor;\n\t\tuser-select: text;\n\t\t-webkit-user-selec..."}
+
+## 2026-09-23 09:40:08.315Z load
+- url: https://hot-lights-grin.loca.lt/
+- title: ReportAKI
+
+## 2026-09-23 09:43:56.866Z load
+- url: https://dramatic-unavailable-intimate-roles.trycloudflare.com/
+- title: ReportAKI
+
+## 2026-09-23 09:44:09.343Z navigate
+- url: https://dramatic-unavailable-intimate-roles.trycloudflare.com/
+- via: replaceState
+
+## 2026-09-23 09:44:10.978Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:44:11.054Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:44:18.929Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"051207513001","valueLength":12,"text":""}
+
+## 2026-09-23 09:44:18.930Z click
+- element: {"tag":"button","role":null,"ariaLabel":"Αναζήτηση","name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":""}
+
+## 2026-09-23 09:44:18.931Z submit
+- action: https://dramatic-unavailable-intimate-roles.trycloudflare.com/
+- fields: [{"label":"Αναζήτηση με ΚΑΕΚ...","type":"text","value":"051207513001","length":12,"redacted":false},{"label":"Αναζήτηση","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-23 09:44:18.940Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"051207513001","valueLength":12,"text":""}
+
+## 2026-09-23 09:44:19.340Z navigate
+- url: https://dramatic-unavailable-intimate-roles.trycloudflare.com/property/051207513001
+- via: pushState
+
+## 2026-09-23 09:44:22.465Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"ΠόρισμαΠατήστε για παραγωγή και προβολή πορίσματος"}
+
+## 2026-09-23 09:45:33.376Z load
+- url: https://dramatic-unavailable-intimate-roles.trycloudflare.com/
+- title: ReportAKI
+
+## 2026-09-23 09:45:46.384Z navigate
+- url: https://dramatic-unavailable-intimate-roles.trycloudflare.com/
+- via: replaceState
+
+## 2026-09-23 09:45:47.708Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:45:47.713Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:46:38.118Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"050095707002","valueLength":12,"text":""}
+
+## 2026-09-23 09:46:38.119Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"text","id":null,"placeholder":"Αναζήτηση με ΚΑΕΚ...","label":"Αναζήτηση με ΚΑΕΚ...","value":"050095707002","valueLength":12,"text":""}
+
+## 2026-09-23 09:46:38.121Z click
+- element: {"tag":"button","role":null,"ariaLabel":"Αναζήτηση","name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":""}
+
+## 2026-09-23 09:46:38.124Z submit
+- action: https://dramatic-unavailable-intimate-roles.trycloudflare.com/
+- fields: [{"label":"Αναζήτηση με ΚΑΕΚ...","type":"text","value":"050095707002","length":12,"redacted":false},{"label":"Αναζήτηση","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-23 09:46:39.547Z navigate
+- url: https://dramatic-unavailable-intimate-roles.trycloudflare.com/property/050095707002
+- via: pushState
+
+## 2026-09-23 09:46:47.783Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"button","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Επικοινωνία"}
+
+## 2026-09-23 09:46:47.812Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:46:49.198Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"Γαωηαβα","valueLength":7,"text":""}
+
+## 2026-09-23 09:46:49.712Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-name","placeholder":"Το ονοματεπώνυμό σας","label":"Όνομα","value":"Γαωηαβα","valueLength":7,"text":""}
+
+## 2026-09-23 09:46:49.713Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:46:49.714Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:46:50.413Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"el.tzanopoulou@gmail.com","valueLength":24,"text":""}
+
+## 2026-09-23 09:46:50.791Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":"email","id":"contact-email","placeholder":"you@example.com","label":"Email","value":"el.tzanopoulou@gmail.com","valueLength":24,"text":""}
+
+## 2026-09-23 09:46:50.792Z focus
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:46:50.793Z click
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:46:51.609Z change
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"Ως βαωαβαβ","valueLength":10,"text":""}
+
+## 2026-09-23 09:46:52.028Z blur
+- element: {"tag":"input","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-subject","placeholder":"Θέμα μηνύματος","label":"Θέμα","value":"Ως βαωαβαβ","valueLength":10,"text":""}
+
+## 2026-09-23 09:46:52.029Z focus
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:46:52.032Z click
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"","valueLength":0,"text":""}
+
+## 2026-09-23 09:46:53.728Z change
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"Bbsbsbsbs","valueLength":9,"text":"Bbsbsbsbs"}
+
+## 2026-09-23 09:46:53.728Z blur
+- element: {"tag":"textarea","role":null,"ariaLabel":null,"name":null,"type":null,"id":"contact-message","placeholder":"Γράψτε το μήνυμά σας...","label":"Μήνυμα","value":"Bbsbsbsbs","valueLength":9,"text":"Bbsbsbsbs"}
+
+## 2026-09-23 09:46:53.729Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"submit","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Αποστολή"}
+
+## 2026-09-23 09:46:53.732Z submit
+- action: https://dramatic-unavailable-intimate-roles.trycloudflare.com/property/050095707002
+- fields: [{"label":"Όνομα","type":"text","value":"Γαωηαβα","length":7,"redacted":false},{"label":"Email","type":"email","value":"el.tzanopoulou@gmail.com","length":24,"redacted":false},{"label":"Θέμα","type":"text","value":"Ως βαωαβαβ","length":10,"redacted":false},{"label":"Μήνυμα","type":"textarea","value":"Bbsbsbsbs","length":9,"redacted":false},{"label":"[submit]","type":"submit","value":"","length":0,"redacted":false}]
+
+## 2026-09-23 09:47:12.380Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":"button","id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Κλείσιμο"}
+
+## 2026-09-23 09:47:16.507Z click
+- element: {"tag":"html","role":null,"ariaLabel":null,"name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"\n    import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$RefreshSig$ = () => (type) => type;\n\n    \n\n    \n    \n    \n    \n    Αναφορά 050095707002 - ReportAKI\n    const SITE_PAGES_ENDPOINT = '/__reportaki/site-pages';\n\nconst OUTGOING_SITE_PAGES_MESSAGE = 'sitePages';\nconst INCOMING_REQUEST_SITE_PAGES_MESSAGE = 'request-site-pages';\n\nconst ALLOWED_PARENT_ORIGINS = [\n\t'https://reportaki.app.com',\n\t'https://reportaki.app.dev',\n\t'https://reportaki-frontend-local.app.dev',\n\t'http://localhost:4000',\n];\n\nfunction postSitePages(pages) {\n\tlet parentOrigin = window.location.ancestorOrigins?.[0];\n\tif (!parentOrigin && document.referrer) {\n\t\ttry {\n\t\t\tparentOrigin = new URL(document.referrer).origin;\n\t\t} catch {}\n\t}\n\tif (parentOrigin && ALLOWED_PARENT_ORIGINS.includes(parentOrigin)) {\n\t\twindow.parent.postMessage({ type: OUTGOING_SITE_PAGES_MESSAGE, payload: { pages } }, parentOrigin);\n\t}\n}\n\nasync function sendSitePagesToParent() {\n\tif (window.self === window.top) {\n\t\treturn;\n\t}\n\n\ttry {\n\t\tconst response = await fetch(SITE_PAGES_ENDPOINT);\n\t\tif (!response.ok) {\n\t\t\tthrow new Error(`HTTP ${response.status}`);\n\t\t}\n\t\tpostSitePages(await response.json());\n\t} catch (error) {\n\t\tconsole.error('[site-pages] Failed to send site pages to parent:', error);\n\t}\n}\n\nif (window.self !== window.top) {\n\twindow.addEventListener('load', sendSitePagesToParent);\n\twindow.addEventListener('message', (event) => {\n\t\tif (event.data?.type === INCOMING_REQUEST_SITE_PAGES_MESSAGE) {\n\t\t\tsendSitePagesToParent();\n\t\t}\n\t});\n}\n\n    \n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-id],\n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-assisted-id] {\n\t\tcursor: default !important;\n\t\toverflow-wrap: anywhere;\n\t}\n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-id][contenteditable=\"true\"],\n\t#root[data-edit-mode-enabled=\"true\"] [data-edit-assisted-id][contenteditable=\"true\"] {\n\t\toutline: 1px solid #673DE6;\n\t\tcaret-color: currentColor;\n\t\tuser-select: tex..."}
+
+## 2026-09-23 09:47:17.265Z click
+- element: {"tag":"div","role":"menuitem","ariaLabel":null,"name":null,"type":null,"id":"radix-:rd:","placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Πολεοδομική Πληροφορία"}
+
+## 2026-09-23 09:47:18.019Z click
+- element: {"tag":"div","role":"menuitem","ariaLabel":null,"name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Οικοδομική Γραμμή"}
+
+## 2026-09-23 09:47:24.935Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"ΠόρισμαΠατήστε για παραγωγή και προβολή πορίσματος"}
+
+## 2026-09-23 09:48:40.890Z click
+- element: {"tag":"button","role":null,"ariaLabel":"Εξαγωγή δεδομένων","name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Εξαγωγή"}
+
+## 2026-09-23 09:48:44.528Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Εξαγωγή Δεδομένων Ακινήτου"}
+
+## 2026-09-23 09:48:54.555Z click
+- element: {"tag":"button","role":null,"ariaLabel":"Κλείσιμο","name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":""}
+
+## 2026-09-23 09:48:55.305Z click
+- element: {"tag":"button","role":null,"ariaLabel":"Εξαγωγή δεδομένων","name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Εξαγωγή"}
+
+## 2026-09-23 09:48:56.029Z click
+- element: {"tag":"button","role":null,"ariaLabel":null,"name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":"Εξαγωγή Τεχνικού Πορίσματος Ακινήτου"}
+
+## 2026-09-23 09:49:00.914Z click
+- element: {"tag":"button","role":null,"ariaLabel":"Κλείσιμο","name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":""}
+
