@@ -13,4 +13,4 @@ RUN unzip /tmp/pb.zip -d /pb/
 EXPOSE 8080
 
 # Run PocketBase
-CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8080", "--dir=/pb/pb_data"]
+CMD /pb/pocketbase superuser upsert reportaki.support@gmail.com reportaki2026 && /pb/pocketbase serve --http=0.0.0.0:8080 --dir=/pb/pb_data
