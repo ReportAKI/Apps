@@ -250,3 +250,39 @@
 ## 2026-09-23 09:49:00.914Z click
 - element: {"tag":"button","role":null,"ariaLabel":"Κλείσιμο","name":null,"type":null,"id":null,"placeholder":null,"label":null,"value":null,"valueLength":0,"text":""}
 
+## 2026-09-23 10:02:26.427Z load
+- url: https://dramatic-unavailable-intimate-roles.trycloudflare.com/property/050095707002
+- title: ReportAKI
+
+## 2026-09-26 09:10:42.871Z load
+- url: http://172.30.2.142:3000/
+- title: ReportAKI
+
+## 2026-09-26 09:10:43.848Z navigate
+- url: http://172.30.2.142:3000/
+- via: replaceState
+
+## 2026-09-26 09:35:14.462Z load
+- url: http://172.30.2.142:3000/
+- title: ReportAKI
+
+## 2026-09-26 09:35:21.151Z load
+- url: http://172.30.2.142:3000/
+- title: ReportAKI
+
+## 2026-09-26 09:36:57.571Z load
+- url: http://172.30.2.142:3000/
+- title: ReportAKI
+
+## 2026-09-26 09:37:21.798Z load
+- url: http://172.30.2.142:3000/
+- title: ReportAKI
+
+## 2026-09-26 09:39:57.053Z load
+- url: http://172.30.2.142:3000/
+- title: ReportAKI
+
+## 2026-09-26 09:40:19.241Z load
+- url: http://172.30.2.142:3000/
+- title: ReportAKI
+
