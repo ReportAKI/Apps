@@ -16,5 +16,8 @@
   },
   "workspaces": [
     "apps/*"
-  ]
+  ],
+  "dependencies": {
+    "resend": "^6.30.0"
+  }
 }

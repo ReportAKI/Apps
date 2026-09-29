@@ -26,6 +26,7 @@
     "node-forge": "^1.4.0",
     "pdf-parse": "^2.4.5",
     "pocketbase": "^0.25.0",
+    "resend": "^6.30.0",
     "sharp": "^0.35.4"
   },
   "devDependencies": {

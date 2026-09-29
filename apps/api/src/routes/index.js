@@ -14,7 +14,7 @@ import propertySummaryRouter from './property-summary.js';
 import exportCodeRouter from './export-code.js';
 import mobileDownloadRouter from './mobile-download.js';
 import installApkRouter from './install-apk.js';
-
+import contactRouter from './contact.js';
 const router = Router();
 
 export default () => {
