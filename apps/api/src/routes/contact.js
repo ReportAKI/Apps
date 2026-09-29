@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
     try {
         // 1. Email ειδοποίησης προς την υποστήριξη
         await resend.emails.send({
-            from: 'ReportAKI <onboarding@resend.dev>',
+            from: 'ReportAKI Support <support@reportaki.gr>',
             to: ['reportaki.support@gmail.com'],
             reply_to: email,
             subject: `[ReportAKI] Νέο μήνυμα: ${emailSubject}`,
