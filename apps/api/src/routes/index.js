@@ -20,6 +20,7 @@ const router = Router();
 export default () => {
     router.get('/health', healthCheck);
     router.get('/export-code', exportCodeRouter);
+    router.use('/contact', contactRouter);
     mobileDownloadRouter(router);
     installApkRouter(router);
     router.use('/property-summary', propertySummaryRouter);
