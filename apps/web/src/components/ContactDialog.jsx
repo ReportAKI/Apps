@@ -11,11 +11,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Loader2, Mail, CheckCircle2 } from 'lucide-react';
-import pocketbaseClient from '@/lib/pocketbaseClient';
 
 const initialForm = { name: '', email: '', subject: '', message: '' };
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Παίρνει το API URL από το περιβάλλον του Vite ή fallback στο Render URL/localhost
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 const ContactDialog = ({ trigger }) => {
   const [open, setOpen] = useState(false);
@@ -72,15 +74,27 @@ const ContactDialog = ({ trigger }) => {
 
     setSubmitting(true);
     try {
-      await pocketbaseClient.collection('contact_messages').create({
-        name: form.name.trim(),
-        email: form.email.trim(),
-        subject: form.subject.trim(),
-        message: form.message.trim(),
+      const response = await fetch(`${API_BASE_URL}/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          subject: form.subject.trim(),
+          message: form.message.trim(),
+        }),
       });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Request failed');
+      }
 
       setSubmitted(true);
     } catch (err) {
+      console.error('Contact submit error:', err);
       setServerError(
         'Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος. Δοκιμάστε ξανά σε λίγο.'
       );
