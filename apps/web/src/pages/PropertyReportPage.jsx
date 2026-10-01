@@ -5,7 +5,7 @@ import {
   ArrowLeft, Maximize, Ruler, Loader2, Database, AlertTriangle, 
   RefreshCw, ExternalLink, MapPin, Filter, ChevronDown, Check, 
   Download, FileText, Scale, Landmark, 
-  CheckCircle2, Building2, Map as MapIcon, X
+  CheckCircle2, Building2, Map as MapIcon, X, Move, Lock
 } from 'lucide-react';
 import { buildExportModel, generatePdfHtml, generateSummaryHtml } from '@/lib/propertyExport';
 import html2canvas from 'html2canvas';
@@ -19,13 +19,43 @@ import apiServerClient from '@/lib/apiServerClient';
 import { toast } from 'sonner';
 import Footer from '@/components/Footer.jsx';
 
-const MapUpdater = ({ bounds }) => {
+const MapUpdater = ({ bounds, isMapInteractive }) => {
   const map = useMap();
+
   useEffect(() => {
+    // 1. Προσαρμογή zoom και ορίων στο γεωτεμάχιο
     if (bounds && bounds.length > 0) {
-      map.fitBounds(bounds, { padding: [50, 50] });
+      map.invalidateSize();
+      map.fitBounds(bounds, { padding: [35, 35], maxZoom: 18 });
     }
+
+    // 2. Αυτόματος επανυπολογισμός σε resize ή αλλαγή προσανατολισμού συσκευής
+    const handleResize = () => {
+      map.invalidateSize();
+      if (bounds && bounds.length > 0) {
+        map.fitBounds(bounds, { padding: [35, 35], maxZoom: 18 });
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
   }, [bounds, map]);
+
+  // 3. Δυναμική ενεργοποίηση / απενεργοποίηση dragging
+  useEffect(() => {
+    if (isMapInteractive) {
+      map.dragging.enable();
+      if (map.touchZoom) map.touchZoom.enable();
+    } else {
+      map.dragging.disable();
+    }
+  }, [isMapInteractive, map]);
+
   return null;
 };
 
@@ -483,8 +513,6 @@ function parseLayerRecord(rows) {
       
       if (f && (f.endsWith('_FLAG') || f.includes('FLAG'))) continue;
 
-      // ΚΑΘΑΡΙΣΜΟΣ ΤΕΧΝΙΚΩΝ ΟΡΩΝ ΕΛΣΤΑΤ/GIS
-      // Αντικατάσταση του «ΨΕΥΔΟΔΗΜΟΤΙΚΗ ΚΟΙΝΟΤΗΤΑ» σε καθαρή «Δημοτική Κοινότητα»
       if (strVal.includes('ΨΕΥΔΟ')) {
         strVal = strVal.replace(/ΨΕΥΔΟΔΗΜΟΤΙΚΗ\s+ΚΟΙΝΟΤΗΤΑ/gi, 'Δημοτική Κοινότητα').trim();
       }
@@ -587,6 +615,11 @@ const PropertyReportPage = () => {
   const [summaryError, setSummaryError] = useState(null);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   
+  // State για ξεκλείδωμα πλοήγησης χάρτη σε φορητές συσκευές
+  const [isMapUnlocked, setIsMapUnlocked] = useState(
+    typeof window !== 'undefined' ? window.innerWidth > 768 : true
+  );
+
   const mapWrapperRef = useRef(null);
 
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
@@ -611,7 +644,6 @@ const PropertyReportPage = () => {
   const selectedCategory = consolidatedCategories.find(cat => cat.key === selectedCategoryKey) || consolidatedCategories[0] || null;
   const selectedLayer = selectedCategory ? (selectedCategory.layers[selectedLayerIndex] || selectedCategory.layers[0] || null) : null;
   
-  // Υπολογισμός επιλεγμένων για το modal εξαγωγής (από τις 4 κατηγορίες)
   const selectedExportCount = Object.keys(selectedCategoryKeys).filter(k => selectedCategoryKeys[k] && consolidatedCategories.some(c => c.key === k)).length;
   
   const buildingStats = useMemo(() => extractGlobalBuildingStats(sdigmap?.categories), [sdigmap]);
@@ -731,7 +763,6 @@ const PropertyReportPage = () => {
     }));
   }
 
-  // Ενημέρωση όλων των 4 κατηγοριών στο Modal
   function toggleAllExportCategories(value) {
     const updated = {};
     consolidatedCategories.forEach(cat => {
@@ -853,7 +884,6 @@ const PropertyReportPage = () => {
     }
   }, [propertyData]);
 
-  // Αρχικοποίηση επιλογών εξαγωγής για τις 4 ενοποιημένες κατηγορίες (4/4)
   useEffect(() => {
     if (consolidatedCategories.length > 0) {
       const initial = {};
@@ -945,15 +975,58 @@ const PropertyReportPage = () => {
                 </span>}
             </div>
 
-            <div ref={mapWrapperRef} className="map-container-full h-[360px] md:h-[420px] rounded-2xl overflow-hidden border border-gray-200 shadow-xs">
-              {leafletPolygonCoords.length > 0 ? <MapContainer bounds={leafletPolygonCoords} style={{ height: '100%', width: '100%' }} scrollWheelZoom={true} attributionControl={true}>
-                  <MapUpdater bounds={leafletPolygonCoords} />
-                  <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                  <Polygon positions={leafletPolygonCoords} pathOptions={{ color: '#0f766e', weight: 3, fillColor: '#14b8a6', fillOpacity: 0.25 }} />
-                </MapContainer> : <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-gray-100">
+            <div 
+              ref={mapWrapperRef} 
+              className="relative w-full h-[340px] sm:h-[380px] md:h-[440px] rounded-2xl overflow-hidden border border-gray-200 shadow-xs"
+            >
+              {leafletPolygonCoords.length > 0 ? (
+                <>
+                  {/* Κουμπί Ελέγχου Περιήγησης / Scroll για Mobile & Tablet */}
+                  <button
+                    type="button"
+                    onClick={() => setIsMapUnlocked(prev => !prev)}
+                    className="md:hidden absolute top-3 right-3 z-[400] bg-white/95 backdrop-blur-xs text-gray-800 text-xs font-semibold px-3.5 py-2 rounded-full shadow-md border border-gray-200 flex items-center gap-1.5 active:scale-95 transition-all"
+                  >
+                    {isMapUnlocked ? (
+                      <>
+                        <Lock className="w-3.5 h-3.5 text-amber-600" />
+                        <span>Κλείδωμα Χάρτη</span>
+                      </>
+                    ) : (
+                      <>
+                        <Move className="w-3.5 h-3.5 text-teal-600" />
+                        <span>Περιήγηση Χάρτη</span>
+                      </>
+                    )}
+                  </button>
+
+                  <MapContainer 
+                    bounds={leafletPolygonCoords} 
+                    style={{ height: '100%', width: '100%' }} 
+                    scrollWheelZoom={false} 
+                    touchZoom={true}
+                    attributionControl={true}
+                  >
+                    <MapUpdater 
+                      bounds={leafletPolygonCoords} 
+                      isMapInteractive={isMapUnlocked} 
+                    />
+                    <TileLayer 
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' 
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" 
+                    />
+                    <Polygon 
+                      positions={leafletPolygonCoords} 
+                      pathOptions={{ color: '#0f766e', weight: 3, fillColor: '#14b8a6', fillOpacity: 0.25 }} 
+                    />
+                  </MapContainer>
+                </>
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-gray-100">
                   <AlertTriangle className="w-8 h-8 text-gray-400" />
                   <p className="text-sm text-gray-500 font-medium">Δεν υπάρχουν διαθέσιμα γεωγραφικά δεδομένα για αυτό το ακίνητο.</p>
-                </div>}
+                </div>
+              )}
             </div>
           </section>
 
@@ -1140,7 +1213,7 @@ const PropertyReportPage = () => {
                 <div className="flex flex-col gap-8">
                   {selectedLayer.records.map((rows, ri) => {
                     const { tiles, legislationText, links, status } = parseLayerRecord(rows);
-                    if (!status.isValid) return null; // Απόκρυψη εγγραφών που δεν ισχύουν
+                    if (!status.isValid) return null;
 
                     return (
                       <div key={ri} className="flex flex-col gap-4 pt-2 first:pt-0">
