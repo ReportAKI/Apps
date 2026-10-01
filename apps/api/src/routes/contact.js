@@ -32,19 +32,19 @@ router.post('/', async (req, res) => {
             `,
         });
 
-        // 2. Αυτόματη απάντηση προς τον χρήστη
-        await resend.emails.send({
-            from: 'ReportAKI Support <onboarding@resend.dev>',
-            to: [email],
-            subject: `Λάβαμε το μήνυμά σας: ${emailSubject}`,
-            html: `
-                <div style="font-family: sans-serif; line-height: 1.6; color: #111;">
-                    <p>${greeting}</p>
-                    <p>Λάβαμε το μήνυμά σας με θέμα "${emailSubject}" και θα επικοινωνήσουμε μαζί σας το συντομότερο δυνατό.</p>
-                    <p>Ευχαριστούμε,<br />Η ομάδα ReportAKI</p>
-                </div>
-            `,
-        });
+       // 2. Αυτόματη απάντηση προς τον χρήστη
+await resend.emails.send({
+    from: 'ReportAKI Support <noreply@reportaki.gr>', // <-- Εδώ η αλλαγή
+    to: [email],
+    subject: `Λάβαμε το μήνυμά σας: ${emailSubject}`,
+    html: `
+        <div style="font-family: sans-serif; line-height: 1.6; color: #111;">
+            <p>${greeting}</p>
+            <p>Λάβαμε το μήνυμά σας με θέμα "${emailSubject}" και θα επικοινωνήσουμε μαζί σας το συντομότερο δυνατό.</p>
+            <p>Ευχαριστούμε,<br />Η ομάδα ReportAKI</p>
+        </div>
+    `,
+});
 
         return res.status(200).json({ success: true });
     } catch (error) {
