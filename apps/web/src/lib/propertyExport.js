@@ -373,7 +373,7 @@ export const generatePdfHtml = (model) => {
 </html>`;
 };
 
-// --- EXPORT TO PDF (Μόνο Πόρισμα - Αυστηρά 1 Σελίδα χωρίς αρίθμηση) ---
+// --- EXPORT TO PDF (Μόνο Πόρισμα - Full Width, 1 Page, Scrollable Preview) ---
 export const generateSummaryHtml = ({ kaek, summary }) => {
   const currentDateFormatted = new Intl.DateTimeFormat('el-GR', {
     day: 'numeric',
@@ -391,7 +391,7 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
   <style>
     @page {
       size: A4 portrait;
-      margin: 10mm 14mm 10mm 14mm;
+      margin: 10mm 12mm 8mm 12mm;
     }
 
     * { 
@@ -400,37 +400,44 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       padding: 0; 
     }
 
-    html, body {
+    html {
+      background: #f3f4f6;
       height: 100%;
+    }
+
+    body {
       background: #ffffff;
       color: #111827;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      padding: 8mm 12mm;
+      width: 100%;
+      max-width: 210mm;
+      margin: 0 auto;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto; /* Επιτρέπει κανονικό ρολάρισμα στην προεπισκόπηση */
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
 
-    body {
-      padding: 8mm 12mm 6mm 12mm;
-      width: 100%;
-      max-width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden; /* Αποτρέπει το ξεχείλισμα σε 2η σελίδα */
+    /* 1. Header σε ενιαίο πλάτος */
+    .header-section {
+      border-bottom: 1.5px solid #111827;
+      padding-bottom: 3mm;
+      margin-bottom: 4mm;
     }
 
-    /* Header */
-    .header-row {
+    .header-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-bottom: 5mm;
-      padding-bottom: 2mm;
-      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 3mm;
     }
 
     .brand-block {
-      width: 48mm;
+      width: 44mm;
       display: flex;
       align-items: center;
     }
@@ -438,40 +445,33 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     .logo-img {
       width: 100%;
       height: auto;
-      max-height: 60px;
+      max-height: 52px;
       object-fit: contain;
       object-position: left bottom;
       display: block;
     }
 
     .date-block {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 600;
       color: #4b5563;
-      padding-bottom: 2px;
     }
 
-    /* Two Columns Body */
-    .body-layout {
-      display: grid;
-      grid-template-columns: 50mm 1fr;
-      gap: 8mm;
-      align-items: flex-start;
-      flex: 1;
-    }
-
-    /* Left Sidebar: Property Description */
-    .left-col {
+    .header-meta {
       display: flex;
-      flex-direction: column;
-      gap: 5px;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 3mm 6mm;
+      background: #fafafa;
+      border: 0.5px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 5px 8px;
     }
 
-    .meta-kaek-title {
-      font-size: 13.5px;
+    .meta-kaek {
+      font-size: 13px;
       font-weight: 800;
       color: #111827;
-      line-height: 1.25;
       letter-spacing: -0.01em;
     }
 
@@ -479,36 +479,29 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       font-size: 9px;
       font-weight: 500;
       color: #4b5563;
-      line-height: 1.4;
-      margin-top: 2px;
     }
 
-    .meta-divider {
-      width: 100%;
-      height: 1.2px;
-      background: #111827;
-      margin-top: 5px;
-    }
-
-    /* Right Column: Finding */
-    .right-col {
+    /* 2. Κύριο Σώμα Πορίσματος - Πλήρες Πλάτος (1 Στήλη) */
+    .content-body {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 3mm;
+      gap: 2.5mm;
     }
 
     .doc-title {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 800;
       color: #111827;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
-      margin-bottom: 1mm;
+      padding-bottom: 1.5mm;
+      border-bottom: 0.5px solid #e5e7eb;
     }
 
     .summary-text {
-      font-size: 9px;
-      line-height: 1.5;
+      font-size: 8.8px;
+      line-height: 1.48;
       color: #1f2937;
       text-align: justify;
       white-space: pre-wrap;
@@ -516,37 +509,38 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     }
 
     .sign-block {
-      margin-top: 3mm;
+      margin-top: 2mm;
       display: flex;
-      flex-direction: column;
-      gap: 1px;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
     }
 
     .sign-title {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 800;
       color: #111827;
       letter-spacing: 0.03em;
     }
 
-    /* Bottom Info & Disclaimer */
+    /* 3. Υποσέλιδο & Disclaimer */
     .footer-wrapper {
-      margin-top: 4mm;
-      padding-top: 3mm;
+      margin-top: 3mm;
+      padding-top: 2.5mm;
       border-top: 1px solid #111827;
     }
 
     .contact-grid {
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
-      margin-bottom: 2mm;
+      margin-bottom: 1.5mm;
     }
 
     .contact-item {
       display: flex;
-      flex-direction: column;
-      gap: 1px;
+      align-items: center;
+      gap: 4px;
     }
 
     .contact-lbl {
@@ -566,55 +560,54 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       background: #fafafa;
       border: 0.5px solid #e5e7eb;
       border-radius: 4px;
-      padding: 5px 8px;
-      font-size: 7px;
+      padding: 4px 8px;
+      font-size: 6.8px;
       line-height: 1.35;
       color: #6b7280;
       text-align: justify;
     }
 
+    /* Ρυθμίσεις Εκτύπωσης */
     @media print {
+      html, body {
+        background: #ffffff !important;
+        height: 100% !important;
+        overflow: hidden !important;
+      }
       body {
         padding: 0 !important;
         margin: 0 !important;
+        max-width: 100% !important;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Row Header -->
-  <div class="header-row">
-    <div class="brand-block">
-      <img src="/logo.png" alt="ReportAKI" class="logo-img" />
+  <!-- Top Header Section (Ενιαίο) -->
+  <div class="header-section">
+    <div class="header-top">
+      <div class="brand-block">
+        <img src="/logo.png" alt="ReportAKI" class="logo-img" />
+      </div>
+      <div class="date-block">
+        ${currentDateFormatted}
+      </div>
     </div>
 
-    <div class="date-block">
-      ${currentDateFormatted}
+    <div class="header-meta">
+      <span class="meta-kaek">ΚΑΕΚ ${safeKaek}</span>
+      <span class="meta-desc">— Παρουσίαση πολεοδομικών, γεωχωρικών και νομικών δεδομένων</span>
     </div>
   </div>
 
-  <!-- Letter Layout Body -->
-  <div class="body-layout">
-    <!-- Left Column -->
-    <div class="left-col">
-      <div class="meta-kaek-title">
-        ΚΑΕΚ ${safeKaek}
-      </div>
-      <div class="meta-desc">
-        Παρουσίαση πολεοδομικών, γεωχωρικών και νομικών δεδομένων.
-      </div>
-      <div class="meta-divider"></div>
-    </div>
+  <!-- Main Content (Πλήρες Πλάτος) -->
+  <div class="content-body">
+    <h1 class="doc-title">Τεχνικό Πόρισμα Ακινήτου</h1>
+    <div class="summary-text">${esc(summary)}</div>
 
-    <!-- Right Column: Finding -->
-    <div class="right-col">
-      <h1 class="doc-title">Τεχνικό Πόρισμα Ακινήτου</h1>
-      <div class="summary-text">${esc(summary)}</div>
-
-      <div class="sign-block">
-        <span class="sign-title">ReportAKI</span>
-      </div>
+    <div class="sign-block">
+      <span class="sign-title">ReportAKI</span>
     </div>
   </div>
 
@@ -622,7 +615,7 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
   <div class="footer-wrapper">
     <div class="contact-grid">
       <div class="contact-item">
-        <span class="contact-lbl">ΠΗΓΗ ΔΕΔΟΜΕΝΩΝ :</span>
+        <span class="contact-lbl">ΠΗΓΗ ΔΕΔΟΜΕΝΩΝ:</span>
         <span class="contact-val">Εθνικό Κτηματολόγιο / SDIGMAP ΤΕΕ</span>
       </div>
     </div>
