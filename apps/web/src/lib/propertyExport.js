@@ -373,7 +373,7 @@ export const generatePdfHtml = (model) => {
 </html>`;
 };
 
-// --- EXPORT TO PDF (Μόνο Πόρισμα - Full Width, 1 Page, Scrollable Preview) ---
+// --- EXPORT TO PDF (Μόνο Πόρισμα - Float Layout για τέλεια 1 Σελίδα) ---
 export const generateSummaryHtml = ({ kaek, summary }) => {
   const currentDateFormatted = new Intl.DateTimeFormat('el-GR', {
     day: 'numeric',
@@ -417,27 +417,23 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      overflow-y: auto; /* Επιτρέπει κανονικό ρολάρισμα στην προεπισκόπηση */
+      overflow-y: auto; /* Ρολάρει κανονικά στην προεπισκόπηση */
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
 
-    /* 1. Header σε ενιαίο πλάτος */
-    .header-section {
-      border-bottom: 1.5px solid #111827;
-      padding-bottom: 3mm;
-      margin-bottom: 4mm;
-    }
-
-    .header-top {
+    /* Top Logo & Date Header */
+    .header-row {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-bottom: 3mm;
+      margin-bottom: 4mm;
+      padding-bottom: 2mm;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     .brand-block {
-      width: 44mm;
+      width: 48mm;
       display: flex;
       align-items: center;
     }
@@ -445,33 +441,39 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     .logo-img {
       width: 100%;
       height: auto;
-      max-height: 52px;
+      max-height: 55px;
       object-fit: contain;
       object-position: left bottom;
       display: block;
     }
 
     .date-block {
-      font-size: 9.5px;
+      font-size: 10px;
       font-weight: 600;
       color: #4b5563;
+      padding-bottom: 2px;
     }
 
-    .header-meta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 3mm 6mm;
-      background: #fafafa;
-      border: 0.5px solid #e5e7eb;
-      border-radius: 4px;
-      padding: 5px 8px;
+    /* Wrap Content with Float Sidebar */
+    .content-area {
+      flex: 1;
+      position: relative;
     }
 
-    .meta-kaek {
-      font-size: 13px;
+    /* Αριστερό κουτί: Επιπλέει αριστερά και το κείμενο ρέει γύρω του */
+    .left-sidebar-box {
+      float: left;
+      width: 54mm;
+      margin-right: 8mm;
+      margin-bottom: 4mm;
+      padding-bottom: 2mm;
+    }
+
+    .meta-kaek-title {
+      font-size: 13.5px;
       font-weight: 800;
       color: #111827;
+      line-height: 1.25;
       letter-spacing: -0.01em;
     }
 
@@ -479,24 +481,25 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       font-size: 9px;
       font-weight: 500;
       color: #4b5563;
+      line-height: 1.4;
+      margin-top: 2px;
     }
 
-    /* 2. Κύριο Σώμα Πορίσματος - Πλήρες Πλάτος (1 Στήλη) */
-    .content-body {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 2.5mm;
+    .meta-divider {
+      width: 100%;
+      height: 1.2px;
+      background: #111827;
+      margin-top: 5px;
     }
 
+    /* Τίτλος & Κείμενο Πορίσματος */
     .doc-title {
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 800;
       color: #111827;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
       text-transform: uppercase;
-      padding-bottom: 1.5mm;
-      border-bottom: 0.5px solid #e5e7eb;
+      margin-bottom: 2.5mm;
     }
 
     .summary-text {
@@ -509,30 +512,30 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     }
 
     .sign-block {
-      margin-top: 2mm;
+      margin-top: 3mm;
       display: flex;
-      align-items: center;
       justify-content: flex-end;
-      gap: 4px;
+      clear: both;
     }
 
     .sign-title {
-      font-size: 9px;
+      font-size: 9.5px;
       font-weight: 800;
       color: #111827;
       letter-spacing: 0.03em;
     }
 
-    /* 3. Υποσέλιδο & Disclaimer */
+    /* Bottom Info & Disclaimer */
     .footer-wrapper {
       margin-top: 3mm;
       padding-top: 2.5mm;
       border-top: 1px solid #111827;
+      clear: both;
     }
 
     .contact-grid {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       margin-bottom: 1.5mm;
     }
@@ -567,7 +570,6 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       text-align: justify;
     }
 
-    /* Ρυθμίσεις Εκτύπωσης */
     @media print {
       html, body {
         background: #ffffff !important;
@@ -584,25 +586,31 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
 </head>
 <body>
 
-  <!-- Top Header Section (Ενιαίο) -->
-  <div class="header-section">
-    <div class="header-top">
-      <div class="brand-block">
-        <img src="/logo.png" alt="ReportAKI" class="logo-img" />
-      </div>
-      <div class="date-block">
-        ${currentDateFormatted}
-      </div>
+  <!-- Top Logo & Date Header -->
+  <div class="header-row">
+    <div class="brand-block">
+      <img src="/logo.png" alt="ReportAKI" class="logo-img" />
     </div>
 
-    <div class="header-meta">
-      <span class="meta-kaek">ΚΑΕΚ ${safeKaek}</span>
-      <span class="meta-desc">— Παρουσίαση πολεοδομικών, γεωχωρικών και νομικών δεδομένων</span>
+    <div class="date-block">
+      ${currentDateFormatted}
     </div>
   </div>
 
-  <!-- Main Content (Πλήρες Πλάτος) -->
-  <div class="content-body">
+  <!-- Content Area (Left Floating Box + Flowing Text) -->
+  <div class="content-area">
+    <!-- Αριστερό Κουτί ΚΑΕΚ -->
+    <div class="left-sidebar-box">
+      <div class="meta-kaek-title">
+        ΚΑΕΚ ${safeKaek}
+      </div>
+      <div class="meta-desc">
+        Παρουσίαση πολεοδομικών, γεωχωρικών και νομικών δεδομένων.
+      </div>
+      <div class="meta-divider"></div>
+    </div>
+
+    <!-- Δεξιά ξεκινάει ο τίτλος & το κείμενο, και μετά απλώνεται από κάτω -->
     <h1 class="doc-title">Τεχνικό Πόρισμα Ακινήτου</h1>
     <div class="summary-text">${esc(summary)}</div>
 
