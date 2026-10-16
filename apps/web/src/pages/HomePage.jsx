@@ -8,7 +8,6 @@ const HomePage = () => {
     <>
       <Helmet>
         <title>ReportAKI</title>
-        <meta name="description" content="Αναζητήστε και συλλέξτε πολεοδομικά δεδομένα ακινήτων στην Ελλάδα με το ReportAKI" />
       </Helmet>
 
       <div className="min-h-screen flex flex-col bg-white text-black relative overflow-hidden">
@@ -28,7 +27,7 @@ const HomePage = () => {
               </div>
 
               <p className="text-sm md:text-base text-black/70 font-medium max-w-full md:max-w-xl mx-auto mb-10 leading-relaxed">
-                Εισάγετε τον κωδικό ΚΑΕΚ για να δείτε τα πολεοδομικά και νομικά δεδομένα.
+                Εισάγετε τον κωδικό ΚΑΕΚ για να δείτε τα πολεοδομικά και νομικά δεδομένα του ακινήτου σας.
               </p>
 
               <div className="w-full">

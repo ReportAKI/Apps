@@ -373,7 +373,7 @@ export const generatePdfHtml = (model) => {
 </html>`;
 };
 
-// --- EXPORT TO PDF (Μόνο Πόρισμα - Float Layout για τέλεια 1 Σελίδα) ---
+// --- EXPORT TO PDF (Μόνο Πόρισμα - Μεγάλο Logo & KAEK κάτω από τη γραμμή) ---
 export const generateSummaryHtml = ({ kaek, summary }) => {
   const currentDateFormatted = new Intl.DateTimeFormat('el-GR', {
     day: 'numeric',
@@ -391,7 +391,7 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
   <style>
     @page {
       size: A4 portrait;
-      margin: 10mm 12mm 8mm 12mm;
+      margin: 10mm 14mm 8mm 14mm;
     }
 
     * { 
@@ -401,15 +401,15 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     }
 
     html {
-      background: #f3f4f6;
+      background: #f1f5f9;
       height: 100%;
     }
 
     body {
       background: #ffffff;
-      color: #111827;
+      color: #0f172a;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      padding: 8mm 12mm;
+      padding: 8mm 12mm 5mm 12mm;
       width: 100%;
       max-width: 210mm;
       margin: 0 auto;
@@ -417,156 +417,150 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      overflow-y: auto; /* Ρολάρει κανονικά στην προεπισκόπηση */
+      overflow-y: auto;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
 
-    /* Top Logo & Date Header */
-    .header-row {
+    /* 1. Header: ΜΟΝΟ η ημερομηνία πάνω από τη γραμμή */
+    .top-date-row {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 4mm;
+      justify-content: flex-end;
+      align-items: center;
       padding-bottom: 2mm;
-      border-bottom: 1px solid #e5e7eb;
+      font-size: 10px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .main-header-divider {
+      width: 100%;
+      height: 1.5px;
+      background: #0f172a;
+      margin-bottom: 5mm;
+    }
+
+    /* 2. Σώμα Εγγράφου με Float Sidebar */
+    .doc-main-content {
+      flex: 1;
+      position: relative;
+    }
+
+    /* Αριστερό Μπλοκ: Μεγάλο Logo + Μεγάλο ΚΑΕΚ */
+    .left-identity-box {
+      float: left;
+      width: 62mm;
+      margin-right: 8mm;
+      margin-bottom: 4mm;
     }
 
     .brand-block {
-      width: 48mm;
-      display: flex;
-      align-items: center;
+      width: 100%;
+      max-width: 58mm;
+      margin-bottom: 5mm;
     }
 
     .logo-img {
       width: 100%;
       height: auto;
-      max-height: 55px;
+      max-height: 70px; /* Μεγαλωμένο Logo */
       object-fit: contain;
-      object-position: left bottom;
+      object-position: left top;
       display: block;
     }
 
-    .date-block {
-      font-size: 10px;
-      font-weight: 600;
-      color: #4b5563;
-      padding-bottom: 2px;
-    }
-
-    /* Wrap Content with Float Sidebar */
-    .content-area {
-      flex: 1;
-      position: relative;
-    }
-
-    /* Αριστερό κουτί: Επιπλέει αριστερά και το κείμενο ρέει γύρω του */
-    .left-sidebar-box {
-      float: left;
-      width: 54mm;
-      margin-right: 8mm;
-      margin-bottom: 4mm;
-      padding-bottom: 2mm;
-    }
-
     .meta-kaek-title {
-      font-size: 13.5px;
+      font-size: 15px; /* Μεγαλωμένο KAEK */
       font-weight: 800;
-      color: #111827;
+      color: #0f172a;
       line-height: 1.25;
       letter-spacing: -0.01em;
     }
 
     .meta-desc {
-      font-size: 9px;
+      font-size: 9.5px;
       font-weight: 500;
-      color: #4b5563;
-      line-height: 1.4;
+      color: #475569;
+      line-height: 1.45;
       margin-top: 2px;
     }
 
     .meta-divider {
       width: 100%;
-      height: 1.2px;
-      background: #111827;
-      margin-top: 5px;
+      height: 1.5px;
+      background: #0f172a;
+      margin-top: 6px;
     }
 
-    /* Τίτλος & Κείμενο Πορίσματος */
+    /* Δεξιά: Τίτλος & Κείμενο που ξεκινά δίπλα και ρέει από κάτω */
     .doc-title {
-      font-size: 13.5px;
+      font-size: 14px;
       font-weight: 800;
-      color: #111827;
+      color: #0f172a;
       letter-spacing: 0.02em;
       text-transform: uppercase;
       margin-bottom: 2.5mm;
     }
 
     .summary-text {
-      font-size: 8.8px;
-      line-height: 1.48;
-      color: #1f2937;
+      font-size: 8.9px;
+      line-height: 1.5;
+      color: #1e293b;
       text-align: justify;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
     .sign-block {
-      margin-top: 3mm;
+      margin-top: 3.5mm;
       display: flex;
       justify-content: flex-end;
       clear: both;
     }
 
     .sign-title {
-      font-size: 9.5px;
+      font-size: 10px;
       font-weight: 800;
-      color: #111827;
+      color: #0f172a;
       letter-spacing: 0.03em;
     }
 
-    /* Bottom Info & Disclaimer */
+    /* 3. Υποσέλιδο & Disclaimer */
     .footer-wrapper {
-      margin-top: 3mm;
+      margin-top: 3.5mm;
       padding-top: 2.5mm;
-      border-top: 1px solid #111827;
+      border-top: 1px solid #0f172a;
       clear: both;
-    }
-
-    .contact-grid {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      margin-bottom: 1.5mm;
     }
 
     .contact-item {
       display: flex;
       align-items: center;
       gap: 4px;
+      margin-bottom: 1.5mm;
     }
 
     .contact-lbl {
       font-size: 7px;
       font-weight: 800;
-      color: #111827;
+      color: #0f172a;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
     .contact-val {
       font-size: 7.5px;
-      color: #4b5563;
+      color: #475569;
     }
 
     .disclaimer-box {
-      background: #fafafa;
-      border: 0.5px solid #e5e7eb;
+      background: #f8fafc;
+      border: 0.5px solid #cbd5e1;
       border-radius: 4px;
       padding: 4px 8px;
       font-size: 6.8px;
       line-height: 1.35;
-      color: #6b7280;
+      color: #64748b;
       text-align: justify;
     }
 
@@ -586,21 +580,18 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
 </head>
 <body>
 
-  <!-- Top Logo & Date Header -->
-  <div class="header-row">
-    <div class="brand-block">
-      <img src="/logo.png" alt="ReportAKI" class="logo-img" />
-    </div>
-
-    <div class="date-block">
-      ${currentDateFormatted}
-    </div>
+  <!-- Μόνο η ημερομηνία πάνω από τη γραμμή -->
+  <div class="top-date-row">
+    ${currentDateFormatted}
   </div>
+  <div class="main-header-divider"></div>
 
-  <!-- Content Area (Left Floating Box + Flowing Text) -->
-  <div class="content-area">
-    <!-- Αριστερό Κουτί ΚΑΕΚ -->
-    <div class="left-sidebar-box">
+  <!-- Σώμα: Logo + KAEK αριστερά, Τεχνικό Πόρισμα δεξιά και κάτω -->
+  <div class="doc-main-content">
+    <div class="left-identity-box">
+      <div class="brand-block">
+        <img src="/logo.png" alt="ReportAKI" class="logo-img" />
+      </div>
       <div class="meta-kaek-title">
         ΚΑΕΚ ${safeKaek}
       </div>
@@ -610,7 +601,6 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       <div class="meta-divider"></div>
     </div>
 
-    <!-- Δεξιά ξεκινάει ο τίτλος & το κείμενο, και μετά απλώνεται από κάτω -->
     <h1 class="doc-title">Τεχνικό Πόρισμα Ακινήτου</h1>
     <div class="summary-text">${esc(summary)}</div>
 
@@ -619,13 +609,11 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     </div>
   </div>
 
-  <!-- Bottom Details & Disclaimer -->
+  <!-- Υποσέλιδο & Disclaimer -->
   <div class="footer-wrapper">
-    <div class="contact-grid">
-      <div class="contact-item">
-        <span class="contact-lbl">ΠΗΓΗ ΔΕΔΟΜΕΝΩΝ:</span>
-        <span class="contact-val">Εθνικό Κτηματολόγιο / SDIGMAP ΤΕΕ</span>
-      </div>
+    <div class="contact-item">
+      <span class="contact-lbl">ΠΗΓΗ ΔΕΔΟΜΕΝΩΝ:</span>
+      <span class="contact-val">Εθνικό Κτηματολόγιο / SDIGMAP ΤΕΕ</span>
     </div>
 
     <div class="disclaimer-box">
