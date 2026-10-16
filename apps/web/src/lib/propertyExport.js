@@ -172,13 +172,7 @@ export const generatePdfHtml = (model) => {
   <style>
     @page {
       size: A4 portrait;
-      margin: 16mm 14mm 16mm 14mm;
-      @bottom-right {
-        content: "Σελίδα " counter(page);
-        font-size: 8pt;
-        color: #6b7280;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      }
+      margin: 14mm 14mm 14mm 14mm;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -187,7 +181,7 @@ export const generatePdfHtml = (model) => {
       background: #ffffff;
       font-size: 10px;
       line-height: 1.35;
-      padding: 14mm 14mm;
+      padding: 12mm 14mm;
       width: 100%;
     }
     .top-grid {
@@ -379,7 +373,7 @@ export const generatePdfHtml = (model) => {
 </html>`;
 };
 
-// --- EXPORT TO PDF (Μόνο Πόρισμα) ---
+// --- EXPORT TO PDF (Μόνο Πόρισμα - Αυστηρά 1 Σελίδα χωρίς αρίθμηση) ---
 export const generateSummaryHtml = ({ kaek, summary }) => {
   const currentDateFormatted = new Intl.DateTimeFormat('el-GR', {
     day: 'numeric',
@@ -395,16 +389,9 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
   <meta charset="utf-8" />
   <title>Πόρισμα ${safeKaek} - ReportAKI</title>
   <style>
-    /* 1. Ρύθμιση σελίδας A4 με σωστά περιθώρια εκτύπωσης */
     @page {
       size: A4 portrait;
-      margin: 18mm 16mm 18mm 16mm;
-      @bottom-right {
-        content: "Σελίδα " counter(page);
-        font-size: 8pt;
-        color: #6b7280;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      }
+      margin: 10mm 14mm 10mm 14mm;
     }
 
     * { 
@@ -413,19 +400,23 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       padding: 0; 
     }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      color: #111827;
+    html, body {
+      height: 100%;
       background: #ffffff;
-      padding: 14mm 16mm;
+      color: #111827;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      padding: 8mm 12mm 6mm 12mm;
       width: 100%;
       max-width: 100%;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
+      overflow: hidden; /* Αποτρέπει το ξεχείλισμα σε 2η σελίδα */
     }
 
     /* Header */
@@ -433,13 +424,13 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-bottom: 7mm;
-      padding-bottom: 3mm;
+      margin-bottom: 5mm;
+      padding-bottom: 2mm;
       border-bottom: 1px solid #e5e7eb;
     }
 
     .brand-block {
-      width: 55mm;
+      width: 48mm;
       display: flex;
       align-items: center;
     }
@@ -447,14 +438,14 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     .logo-img {
       width: 100%;
       height: auto;
-      max-height: 75px;
+      max-height: 60px;
       object-fit: contain;
       object-position: left bottom;
       display: block;
     }
 
     .date-block {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 600;
       color: #4b5563;
       padding-bottom: 2px;
@@ -463,8 +454,8 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     /* Two Columns Body */
     .body-layout {
       display: grid;
-      grid-template-columns: 54mm 1fr;
-      gap: 10mm;
+      grid-template-columns: 50mm 1fr;
+      gap: 8mm;
       align-items: flex-start;
       flex: 1;
     }
@@ -473,51 +464,51 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     .left-col {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
 
     .meta-kaek-title {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 800;
       color: #111827;
-      line-height: 1.3;
+      line-height: 1.25;
       letter-spacing: -0.01em;
     }
 
     .meta-desc {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 500;
       color: #4b5563;
-      line-height: 1.5;
+      line-height: 1.4;
       margin-top: 2px;
     }
 
     .meta-divider {
       width: 100%;
-      height: 1.5px;
+      height: 1.2px;
       background: #111827;
-      margin-top: 6px;
+      margin-top: 5px;
     }
 
     /* Right Column: Finding */
     .right-col {
       display: flex;
       flex-direction: column;
-      gap: 4mm;
+      gap: 3mm;
     }
 
     .doc-title {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 800;
       color: #111827;
       letter-spacing: 0.02em;
       text-transform: uppercase;
-      margin-bottom: 2mm;
+      margin-bottom: 1mm;
     }
 
     .summary-text {
-      font-size: 10px;
-      line-height: 1.7;
+      font-size: 9px;
+      line-height: 1.5;
       color: #1f2937;
       text-align: justify;
       white-space: pre-wrap;
@@ -525,33 +516,31 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     }
 
     .sign-block {
-      margin-top: 6mm;
+      margin-top: 3mm;
       display: flex;
       flex-direction: column;
-      gap: 2px;
-      break-inside: avoid;
+      gap: 1px;
     }
 
     .sign-title {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 800;
       color: #111827;
       letter-spacing: 0.03em;
     }
 
-    /* Bottom Info, Disclaimer & Page Footer */
+    /* Bottom Info & Disclaimer */
     .footer-wrapper {
-      margin-top: 8mm;
-      padding-top: 4mm;
+      margin-top: 4mm;
+      padding-top: 3mm;
       border-top: 1px solid #111827;
-      break-inside: avoid;
     }
 
     .contact-grid {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
-      margin-bottom: 3mm;
+      margin-bottom: 2mm;
     }
 
     .contact-item {
@@ -561,7 +550,7 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     }
 
     .contact-lbl {
-      font-size: 7.5px;
+      font-size: 7px;
       font-weight: 800;
       color: #111827;
       text-transform: uppercase;
@@ -569,36 +558,25 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     }
 
     .contact-val {
-      font-size: 8px;
+      font-size: 7.5px;
       color: #4b5563;
-    }
-
-    .page-number-box {
-      font-size: 8.5px;
-      font-weight: 600;
-      color: #6b7280;
-      text-align: right;
     }
 
     .disclaimer-box {
       background: #fafafa;
       border: 0.5px solid #e5e7eb;
       border-radius: 4px;
-      padding: 6px 10px;
-      font-size: 7.5px;
-      line-height: 1.45;
+      padding: 5px 8px;
+      font-size: 7px;
+      line-height: 1.35;
       color: #6b7280;
       text-align: justify;
     }
 
-    /* Ειδικές ρυθμίσεις εκτύπωσης */
     @media print {
       body {
         padding: 0 !important;
         margin: 0 !important;
-      }
-      .summary-text p {
-        break-inside: avoid;
       }
     }
   </style>
@@ -646,9 +624,6 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       <div class="contact-item">
         <span class="contact-lbl">ΠΗΓΗ ΔΕΔΟΜΕΝΩΝ :</span>
         <span class="contact-val">Εθνικό Κτηματολόγιο / SDIGMAP ΤΕΕ</span>
-      </div>
-      <div class="page-number-box">
-        Σελίδα 1
       </div>
     </div>
 
@@ -713,4 +688,3 @@ export const exportToExcel = async (model) => {
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 };
-
