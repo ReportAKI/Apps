@@ -172,7 +172,13 @@ export const generatePdfHtml = (model) => {
   <style>
     @page {
       size: A4 portrait;
-      margin: 0;
+      margin: 16mm 14mm 16mm 14mm;
+      @bottom-right {
+        content: "Σελίδα " counter(page);
+        font-size: 8pt;
+        color: #6b7280;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -320,7 +326,12 @@ export const generatePdfHtml = (model) => {
     }
     a { color: #1d4ed8; text-decoration: none; }
     @media print {
-      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { 
+        padding: 0 !important; 
+        margin: 0 !important;
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact; 
+      }
     }
   </style>
 </head>
@@ -384,22 +395,37 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
   <meta charset="utf-8" />
   <title>Πόρισμα ${safeKaek} - ReportAKI</title>
   <style>
+    /* 1. Ρύθμιση σελίδας A4 με σωστά περιθώρια εκτύπωσης */
     @page {
       size: A4 portrait;
-      margin: 0;
+      margin: 18mm 16mm 18mm 16mm;
+      @bottom-right {
+        content: "Σελίδα " counter(page);
+        font-size: 8pt;
+        color: #6b7280;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       color: #111827;
       background: #ffffff;
-      padding: 16mm 18mm 14mm 18mm;
-      width: 210mm;
-      min-height: 297mm;
-      position: relative;
+      padding: 14mm 16mm;
+      width: 100%;
+      max-width: 100%;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
 
     /* Header */
@@ -407,37 +433,38 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-bottom: 8mm;
+      margin-bottom: 7mm;
+      padding-bottom: 3mm;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     .brand-block {
-      width: 62mm;
+      width: 55mm;
       display: flex;
       align-items: center;
-      margin-left: -2mm;
     }
 
     .logo-img {
       width: 100%;
       height: auto;
-      max-height: 95px;
+      max-height: 75px;
       object-fit: contain;
       object-position: left bottom;
       display: block;
     }
 
     .date-block {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 600;
-      color: #374151;
-      padding-bottom: 4px;
+      color: #4b5563;
+      padding-bottom: 2px;
     }
 
     /* Two Columns Body */
     .body-layout {
       display: grid;
-      grid-template-columns: 58mm 1fr;
-      gap: 12mm;
+      grid-template-columns: 54mm 1fr;
+      gap: 10mm;
       align-items: flex-start;
       flex: 1;
     }
@@ -446,11 +473,11 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
     .left-col {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
     }
 
     .meta-kaek-title {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       color: #111827;
       line-height: 1.3;
@@ -467,16 +494,16 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
 
     .meta-divider {
       width: 100%;
-      height: 1.2px;
+      height: 1.5px;
       background: #111827;
-      margin-top: 8px;
+      margin-top: 6px;
     }
 
     /* Right Column: Finding */
     .right-col {
       display: flex;
       flex-direction: column;
-      gap: 5mm;
+      gap: 4mm;
     }
 
     .doc-title {
@@ -485,12 +512,13 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       color: #111827;
       letter-spacing: 0.02em;
       text-transform: uppercase;
+      margin-bottom: 2mm;
     }
 
     .summary-text {
       font-size: 10px;
-      line-height: 1.75;
-      color: #374151;
+      line-height: 1.7;
+      color: #1f2937;
       text-align: justify;
       white-space: pre-wrap;
       word-break: break-word;
@@ -501,6 +529,7 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       display: flex;
       flex-direction: column;
       gap: 2px;
+      break-inside: avoid;
     }
 
     .sign-title {
@@ -510,23 +539,25 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       letter-spacing: 0.03em;
     }
 
-    /* Bottom Info & Disclaimer Section */
+    /* Bottom Info, Disclaimer & Page Footer */
     .footer-wrapper {
       margin-top: 8mm;
       padding-top: 4mm;
       border-top: 1px solid #111827;
+      break-inside: avoid;
     }
 
     .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      margin-bottom: 3.5mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3mm;
     }
 
     .contact-item {
       display: flex;
       flex-direction: column;
-      gap: 1.5px;
+      gap: 1px;
     }
 
     .contact-lbl {
@@ -542,19 +573,33 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       color: #4b5563;
     }
 
+    .page-number-box {
+      font-size: 8.5px;
+      font-weight: 600;
+      color: #6b7280;
+      text-align: right;
+    }
+
     .disclaimer-box {
       background: #fafafa;
       border: 0.5px solid #e5e7eb;
       border-radius: 4px;
-      padding: 7px 10px;
+      padding: 6px 10px;
       font-size: 7.5px;
-      line-height: 1.5;
+      line-height: 1.45;
       color: #6b7280;
       text-align: justify;
     }
 
+    /* Ειδικές ρυθμίσεις εκτύπωσης */
     @media print {
-      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body {
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .summary-text p {
+        break-inside: avoid;
+      }
     }
   </style>
 </head>
@@ -601,6 +646,9 @@ export const generateSummaryHtml = ({ kaek, summary }) => {
       <div class="contact-item">
         <span class="contact-lbl">ΠΗΓΗ ΔΕΔΟΜΕΝΩΝ :</span>
         <span class="contact-val">Εθνικό Κτηματολόγιο / SDIGMAP ΤΕΕ</span>
+      </div>
+      <div class="page-number-box">
+        Σελίδα 1
       </div>
     </div>
 
@@ -665,3 +713,4 @@ export const exportToExcel = async (model) => {
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 };
+
